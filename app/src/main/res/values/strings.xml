@@ -1,0 +1,111 @@
+<resources>
+    <string name="app_name">Sportsfun Application</string>
+
+    <string name="lblUsername">Nom d\'utilisateur</string>
+    <string name="lblPassword">Mot de passe</string>
+    <string name="lblConfirmPassword">Confirmer le mot de passe</string>
+
+    <string name="lblEmail">Adresse email</string>
+    <string name="lblFirstname">Prénom</string>
+    <string name="lblLastname">Nom</string>
+    <string name="lblBirthdate">Date de naissance</string>
+
+    <string name="btnSignIn">Connexion</string>
+    <string name="btnSignUp">Inscription</string>
+
+    <string name="lblLinkSignIn">Vous avez déjà un compte ? Cliquez ici</string>
+    <string name="lblLinkSignUp">Vous n\'avez pas de compte ? Cliquez ici</string>
+    <string name="progressSignIn">Authentification en cours...</string>
+    <string name="progressSignUp">Inscription en cours...</string>
+
+    <string name="lblErrorAuthTitle">Erreur d\'authentificiation</string>
+    <string name="lblErrorAuthMessage">Nom d\'utilisateur ou mot de passe incorrect.</string>
+
+    <string name="lblErrorMessageMissingFields">Veuillez remplir tous les champs.</string>
+    <string name="lblErrorMessageAlreadyExists">Un utilisateur existe déjà avec ce nom d\'utilisateur.</string>
+
+    <string name="navHomeTitle">Actualités</string>
+    <string name="navHomeMessages">Messages</string>
+    <string name="navHomeSessions">Statistiques</string>
+    <string name="navHomeNotification">Notifications</string>
+    <string name="navHomeSettings">Paramètres</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="post_like">\tJ\'aime</string>
+    <string name="post_unlike">\tJe n\'aime plus</string>
+
+    <!-- Activity Titles -->
+    <string name="activityUserData">Informations personnels</string>
+    <string name="activityPassword">Mot de passe</string>
+    <string name="activityComments">Commentaires</string>
+
+    <string name="activityMainNews">Dernières publications</string>
+    <string name="activityMainSessions">Statistiques</string>
+    <string name="activityMainMessages">Messagerie</string>
+    <string name="activityMainSettings">Paramètres</string>
+
+    <!-- Activity : User information -->
+
+    <string name="btnFollow">Suivre</string>
+    <string name="btnUnfllow">Arrêter de suivre</string>
+    <string name="btnSendMessage">Envoyer un message</string>
+
+    <!-- _______________ -->
+
+    <string name="connectionerror">Connexion au serveur impossible</string>
+    <string name="btnLike">J\'aime</string>
+    <string name="btnUnlike">Je n\'aime plus</string>
+    <string name="btnComment">Commenter</string>
+
+    <string name="lblLikes">%d personnes aiment ça</string>
+    <string name="lblComments">%d commentaires</string>
+    <string name="title_activity_publish">Nouvelle publication</string>
+    <string name="title_activity_comment">CommentActivity</string>
+
+    <string name="hintMessage">Exprimez-vous</string>
+    <string name="processSending">Envoi en cours...</string>
+
+    <string name="txtViewProfil">Voir mon profil</string>
+
+    <string name="txtIdentityLabel">Identité</string>
+    <string name="txtIdentityDescription">Modifier mes informations personnels</string>
+
+    <string name="txtPasswordLabel">Mot de passe</string>
+    <string name="txtPasswordDescription">Modifier mon mot de passe</string>
+
+    <string name="txtBioLabel">Objectif et Biographie</string>
+    <string name="txtBioDescription">Modifier mon Objectif et ma Biographie</string>
+
+    <string name="txtLogoutDescription">Déconnexion</string>
+    <string name="title_activity_edit_password">Edit Password</string>
+
+    <string name="progressSave">Sauvegarde des changements en cours...</string>
+
+    <string name="txtCurrentPassword">Mot de passe actuel</string>
+    <string name="txtNewPassword">Nouveau mot de passe</string>
+    <string name="txtConfirmNewPassword">Confirmer le nouveau mot de passe</string>
+    <string name="numObjectif">Objectif sportif (en minutes)</string>
+    <string name="txtBiographie">Biographie</string>
+    <string name="btnSaveChanges">Sauvegarder les changements</string>
+
+    <string name="passwordsDontMatch">La confirmation du mot de passe est différente du nouveau mot de passe</string>
+    <string name="passwordsDontMatch2">Les deux mots de passes sont différents</string>
+
+    <string name="invalidEmail">L\'adresse email n\'est pas valide</string>
+    <string name="duplicateEmail">Cette adresse email est déjà utilisé</string>
+
+    <string name="errorOccured">Une erreur s\'est produite</string>
+    <string name="incorrectPassword">Mot de passe incorrect</string>
+    <string name="birhtdateIncorrect">Date de naissance incorrect</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
