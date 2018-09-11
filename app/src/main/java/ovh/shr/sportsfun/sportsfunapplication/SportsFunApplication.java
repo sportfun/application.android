@@ -86,31 +86,6 @@ public class SportsFunApplication {
         SportsFunApplication.context = context;
     }
 
-    public static void UpdateCurrentUserDatas()
-    {
-        NetworkManager.PostRequest("api/user", null, RequestType.GET, new  okhttp3.Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                if (response.isSuccessful()) {
-                    Gson gson = new GsonBuilder().create();
-                    JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
-                    CurrentUser = gson.fromJson(json.get("data").getAsJsonObject(), User.class);
-                }
-
-            }
-
-        });
-    }
-
-
     //endregion Getter & Setters
 
 }

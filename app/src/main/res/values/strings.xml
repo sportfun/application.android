@@ -54,7 +54,7 @@
     <!-- Activity : User information -->
 
     <string name="btnFollow">Suivre</string>
-    <string name="btnUnfllow">Arrêter de suivre</string>
+    <string name="btnUnfollow">Arrêter de suivre</string>
     <string name="btnSendMessage">Envoyer un message</string>
 
     <!-- _______________ -->

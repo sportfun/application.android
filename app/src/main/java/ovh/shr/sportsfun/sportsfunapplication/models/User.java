@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 
 /**
@@ -44,6 +46,9 @@ public class User {
 
     @SerializedName("goal")
     private int goal;
+
+    @SerializedName("links")
+    private List<String> links;
 
     private String profilPicUrl;
 
@@ -145,6 +150,14 @@ public class User {
         else
             this.profilPicUrl = NetworkManager.BASE_CDN + profilPicUrl;
 
+    }
+
+    public List<String> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<String> links) {
+        this.links = links;
     }
 
     //endregion Getters & Setters

@@ -1,6 +1,8 @@
 package ovh.shr.sportsfun.sportsfunapplication.adapters;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import okhttp3.Call;
 import okhttp3.Response;
 import ovh.shr.sportsfun.sportsfunapplication.R;
 import ovh.shr.sportsfun.sportsfunapplication.SportsFunApplication;
+import ovh.shr.sportsfun.sportsfunapplication.activity.MessageActivity;
 import ovh.shr.sportsfun.sportsfunapplication.models.Conversations;
 import ovh.shr.sportsfun.sportsfunapplication.models.User;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
@@ -104,6 +107,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
 
         viewHolder.setEntity(dataList.get(location));
         viewHolder.setActivity(this.currentActivity);
+        viewHolder.setContext(this.currentActivity.getApplicationContext());
 
     }
 
@@ -152,10 +156,12 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
 
                     if (SportsFunApplication.getCurrentUser().getId().equals(author.get("_id").getAsString())) {
                         entity.setAuthor(receiver.get("firstName").getAsString() + receiver.get("lastName").getAsString());
+                        entity.setAuthorId(receiver.get("_id").getAsString());
                         entity.setProfilPic(receiver.get("profilePic").getAsString());
                     } else
                     {
                         entity.setAuthor(author.get("firstName").getAsString() + " " + author.get("lastName").getAsString());
+                        entity.setAuthorId(author.get("_id").getAsString());
                         entity.setProfilPic(author.get("profilePic").getAsString());
                     }
 
@@ -181,6 +187,8 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
 
     }
 
+
+
     //endregion Public Methods
 
     //region ViewHolder
@@ -196,6 +204,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
         public TextView txtContent;
         public TextView txtTimestamp;
         private Activity activity;
+        private Context context;
         public CircleImageView profilPic;
 
         //endregion Declarations
@@ -204,6 +213,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             this.txtUsername = (TextView) itemView.findViewById(R.id.txtName);
             this.txtTimestamp = (TextView) itemView.findViewById(R.id.txtTimestamp);
             this.txtContent = (TextView) itemView.findViewById(R.id.txtMessage);
@@ -231,13 +241,30 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
             this.entity = entity;
         }
 
+        public Context getContext() {
+            return context;
+        }
+
+        public void setContext(Context context) {
+            this.context = context;
+        }
+
         //endregion Getters & Setters
 
         //region Public methods
 
         @Override
-        public void onClick(View view) {
-            System.out.println("LOOOOOOL");
+        public void onClick(View view)
+        {
+            if (getContext() != null) {
+                Intent newIntent = new Intent(getContext(), MessageActivity.class);
+
+                newIntent.putExtra("partnerName", entity.getAuthor());
+                newIntent.putExtra("partnerID", entity.getAuthorId());
+
+                getContext().startActivity(newIntent);
+            }
+
         }
 
         //endregion Public methods

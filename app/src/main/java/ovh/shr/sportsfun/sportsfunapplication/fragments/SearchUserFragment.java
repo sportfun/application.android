@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -171,6 +172,13 @@ public class SearchUserFragment extends Fragment implements AdapterView.OnItemCl
 
                 }
 
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        searchUserAdapter.notifyDataSetChanged();
+
+                    }
+                });
 
             }
 

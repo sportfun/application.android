@@ -50,8 +50,12 @@ public class Conversations {
         @SerializedName("to")
         private String to;
 
+        private String toId;
+
         @SerializedName("author")
         private String author;
+
+        private String authorId;
 
         @SerializedName("profilPic")
         private String profilPic;
@@ -61,6 +65,8 @@ public class Conversations {
 
         @SerializedName("createdAt")
         private Date createdAt;
+
+
 
         //endregion Declarations
 
@@ -133,6 +139,22 @@ public class Conversations {
                 this.profilPic = profilPic;
             else
                 this.profilPic = NetworkManager.BASE_CDN + profilPic;
+        }
+
+        public String getToId() {
+            return toId;
+        }
+
+        public void setToId(String toId) {
+            this.toId = toId;
+        }
+
+        public String getAuthorId() {
+            return authorId;
+        }
+
+        public void setAuthorId(String authorId) {
+            this.authorId = authorId;
         }
 
         //endregion Getters & Setters

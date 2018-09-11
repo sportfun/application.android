@@ -1,5 +1,6 @@
 package ovh.shr.sportsfun.sportsfunapplication.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
@@ -15,13 +16,17 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Response;
 import ovh.shr.sportsfun.sportsfunapplication.R;
+import ovh.shr.sportsfun.sportsfunapplication.SportsFunApplication;
 import ovh.shr.sportsfun.sportsfunapplication.models.User;
+import ovh.shr.sportsfun.sportsfunapplication.network.API;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
 
 public class UserInfoActivity extends AppCompatActivity {
 
@@ -48,9 +53,7 @@ public class UserInfoActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         isLocalUser = b.getBoolean("isLocalUser");
         _id = b.getString("_id");
-
         ButterKnife.bind(this);
-
         LoadDatas();
     }
 
@@ -76,7 +79,12 @@ public class UserInfoActivity extends AppCompatActivity {
             btnSendMessage.setVisibility(View.INVISIBLE);
         }
 
-        System.out.println(endpoint);
+        if (SportsFunApplication.getCurrentUser().getLinks().contains(_id)) {
+            btnFollow.setText(R.string.btnUnfollow);
+        } else {
+            btnFollow.setText(R.string.btnFollow);
+        }
+
 
         NetworkManager.PostRequest(endpoint, null, RequestType.GET, new  okhttp3.Callback() {
 
@@ -121,4 +129,48 @@ public class UserInfoActivity extends AppCompatActivity {
 
     //endregion Private methods
 
+
+    @OnClick(R.id.btnFollow)
+    public void OnBtnFollowClick()
+    {
+
+        API.ToogleFollow(_id, new SCallback() {
+
+            @Override
+            public void onTaskCompleted(JsonObject result) {
+
+                API.RefreshLocalUserData(new SCallback() {
+                    @Override
+                    public void onTaskCompleted(JsonObject result) {
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (SportsFunApplication.getCurrentUser().getLinks().contains(_id)) {
+                                    btnFollow.setText(R.string.btnUnfollow);
+                                } else {
+                                    btnFollow.setText(R.string.btnFollow);
+                                }
+                            }
+                        });
+                    }
+
+                });
+            }
+
+        });
+    }
+
+    @OnClick(R.id.btnSendMessage)
+    public void OnBtnSendMessageClick()
+    {
+
+        Intent newIntent = new Intent(getApplicationContext(), MessageActivity.class);
+
+        newIntent.putExtra("partnerName", userDatas.getFullName());
+        newIntent.putExtra("partnerID", userDatas.getId());
+
+        startActivity(newIntent);
+
+    }
 }

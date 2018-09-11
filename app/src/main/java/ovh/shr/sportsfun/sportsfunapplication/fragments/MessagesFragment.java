@@ -1,6 +1,7 @@
 package ovh.shr.sportsfun.sportsfunapplication.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -10,14 +11,18 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ovh.shr.sportsfun.sportsfunapplication.R;
+import ovh.shr.sportsfun.sportsfunapplication.activity.UserInfoActivity;
 import ovh.shr.sportsfun.sportsfunapplication.adapters.ConversationsAdapter;
+import ovh.shr.sportsfun.sportsfunapplication.models.User;
 
 public class MessagesFragment extends Fragment {
 
@@ -77,6 +82,7 @@ public class MessagesFragment extends Fragment {
         this.recyclerView.setItemAnimator(new DefaultItemAnimator());
         this.recyclerView.setAdapter(conversationsAdapter);
 
+
         return view;
     }
 
@@ -127,7 +133,6 @@ public class MessagesFragment extends Fragment {
     {
         conversationsAdapter.refreshDatas();
     }
-
 
     //endregion Private methods
 
