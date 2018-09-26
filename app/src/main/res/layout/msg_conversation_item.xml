@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
+    android:paddingBottom="2dp"
     >
 
     <LinearLayout
@@ -62,11 +62,11 @@
         <TextView
             android:id="@+id/txtMessage"
             android:layout_width="fill_parent"
-            android:layout_height="41dp"
-            android:paddingBottom="@dimen/feed_item_status_pad_top"
+            android:layout_height="22dp"
+            android:paddingBottom="2dp"
             android:paddingLeft="@dimen/feed_item_status_pad_left_right"
             android:paddingRight="@dimen/feed_item_status_pad_left_right"
-            android:paddingTop="@dimen/feed_item_status_pad_top"
+            android:paddingTop="2dp"
             android:textColor="@color/trans_black"
             tools:text="me.zqPostremo ad id indignitatis est ventum, ut cum peregrini ob formidatam haut ita dudum alimentorum inopiam pellerentur ab urbe praecipites, sectatoribus disciplinarum liberalium inpendio paucis sine respiratione ulla extrusis, tenerentur minimarum adseclae veri, quique id simularunt ad tempus, et tria milia saltatricum ne interpellata quidem cum choris totidemque remanerent magistris." />
 

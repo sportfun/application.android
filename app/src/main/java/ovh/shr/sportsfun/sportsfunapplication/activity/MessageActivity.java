@@ -91,11 +91,7 @@ public class MessageActivity extends AppCompatActivity {
         API.GetConversation(partnerID, new SCallback() {
             @Override
             public void onTaskCompleted(JsonObject result) {
-                System.out.println("lol1");
                 JsonArray data = result.get("data").getAsJsonArray();
-
-                System.out.println(data.toString());
-
                 dataList.clear();
 
                 for (JsonElement jsonElement : data) {
@@ -130,7 +126,7 @@ public class MessageActivity extends AppCompatActivity {
 
     private void SendMessage()
     {
-        API.SendMessage(partnerID, txtMessage.getText().toString(), new SCallback() {
+        API.SendMessage(partnerID, txtMessage.getText().toString().trim(), new SCallback() {
             @Override
             public void onTaskCompleted(JsonObject result) {
                 GetConversation();

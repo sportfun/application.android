@@ -78,14 +78,14 @@ public class MessageListAdapter extends BaseAdapter {
 
                 holder = new ViewHolder();
                 view = inflater.inflate(R.layout.msg_item_in, null);
-                holder.avatar = (CircleImageView) view.findViewById(R.id.icon_in);
+               // holder.avatar = (CircleImageView) view.findViewById(R.id.icon_in);
                 holder.text = (TextView) view.findViewById(R.id.text_in);
 
             } else {
 
                 holder = new ViewHolder();
                 view = inflater.inflate(R.layout.msg_item_out, null);
-                holder.avatar = (CircleImageView) view.findViewById(R.id.icon_out);
+                //holder.avatar = (CircleImageView) view.findViewById(R.id.icon_out);
                 holder.text = (TextView) view.findViewById(R.id.text_out);
 
             }

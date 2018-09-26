@@ -109,6 +109,11 @@ public class SearchUserFragment extends Fragment implements AdapterView.OnItemCl
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        System.out.println("lol1");
+        System.out.println(mParam1);
+
+        SearchUser(mParam1);
+
     }
 
     @Override
@@ -125,6 +130,12 @@ public class SearchUserFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public void onStart() {
         super.onStart();
+        SearchUser(mParam1);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         SearchUser(mParam1);
     }
 
@@ -194,13 +205,20 @@ public class SearchUserFragment extends Fragment implements AdapterView.OnItemCl
 
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 
-        User selectedUser = this.userList.get(position - 1);
+        try {
 
-        Intent intent = new Intent(getContext(), UserInfoActivity.class);
-        intent.putExtra("isLocalUser", false);
-        intent.putExtra("_id", selectedUser.getId());
-        startActivity(intent);
-        System.out.println("lol");
+            User selectedUser = this.userList.get(position);
+
+            Intent intent = new Intent(getContext(), UserInfoActivity.class);
+            intent.putExtra("isLocalUser", false);
+            intent.putExtra("_id", selectedUser.getId());
+            startActivity(intent);
+            System.out.println("lol");
+
+        } catch (Exception err) {
+
+        }
+
     }
 
     public void RefreshUserList(String str) {
