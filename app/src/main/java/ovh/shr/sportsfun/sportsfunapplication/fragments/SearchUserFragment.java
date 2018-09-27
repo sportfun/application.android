@@ -52,6 +52,8 @@ public class SearchUserFragment extends Fragment implements AdapterView.OnItemCl
 
     private Unbinder unbinder;
 
+    private String test;
+
 
     //endregion Decalrations
 
@@ -109,11 +111,6 @@ public class SearchUserFragment extends Fragment implements AdapterView.OnItemCl
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        System.out.println("lol1");
-        System.out.println(mParam1);
-
-        SearchUser(mParam1);
-
     }
 
     @Override
@@ -130,13 +127,12 @@ public class SearchUserFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public void onStart() {
         super.onStart();
-        SearchUser(mParam1);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        SearchUser(mParam1);
+        SearchUser(test);
     }
 
     //endregion Android Specific
@@ -145,9 +141,13 @@ public class SearchUserFragment extends Fragment implements AdapterView.OnItemCl
 
     private void SearchUser(String pattern) {
 
+        userList.clear();
+        Notify();
+
         if (pattern == null || pattern.length() == 0)
         {
             userList.clear();
+            Notify();
             return;
         }
 
@@ -183,18 +183,33 @@ public class SearchUserFragment extends Fragment implements AdapterView.OnItemCl
 
                 }
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        searchUserAdapter.notifyDataSetChanged();
-
-                    }
-                });
+                Notify();
 
             }
 
 
         });
+
+    }
+
+    private void Notify()
+    {
+
+        try {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        searchUserAdapter.notifyDataSetChanged();
+                    }
+                    catch (Exception err) {
+
+                    }
+                }
+            });
+        } catch (Exception err) {
+
+        }
 
     }
 
@@ -222,7 +237,8 @@ public class SearchUserFragment extends Fragment implements AdapterView.OnItemCl
     }
 
     public void RefreshUserList(String str) {
-        SearchUser(str);
+        test = str;
+        SearchUser(test);
     }
 
     //endregion Public methods

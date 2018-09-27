@@ -3,11 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
+
     <item android:id="@+id/action_search"
         android:title="Search"
         android:icon="@drawable/ic_search_black_24dp"
         app:showAsAction="always"
         app:actionViewClass="android.widget.SearchView" />
+
+    <item android:id="@+id/action_scan"
+        android:title="Scan"
+        android:icon="@drawable/baseline_select_all_24"
+        app:showAsAction="always"
+        />
 
     <!--<item android:id="@+id/action_notification"-->
         <!--android:title="Notifications"-->

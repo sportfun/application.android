@@ -53,6 +53,8 @@ public class UserInfoActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         isLocalUser = b.getBoolean("isLocalUser");
         _id = b.getString("_id");
+        if (_id.equals(SportsFunApplication.getCurrentUser().getId()))
+            isLocalUser = true;
         ButterKnife.bind(this);
         LoadDatas();
     }

@@ -86,14 +86,14 @@ public class EditUserDataActivty extends AppCompatActivity implements  DatePicke
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        dtBirthdate.setText(String.format("%d / %d / %d", day, month, year));
+        dtBirthdate.setText(String.format("%d / %d / %d", day, month + 1, year));
 
 
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
 
-                dtBirthdate.setText(String.format("%d / %d / %d", day, month, year));
+                dtBirthdate.setText(String.format("%d / %d / %d", day, month + 1, year));
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year, month, day);

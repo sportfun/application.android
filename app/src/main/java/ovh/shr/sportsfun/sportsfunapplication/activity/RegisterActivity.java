@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -83,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity implements  DatePickerDi
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
 
-                dtBirthdate.setText(String.format("%d / %d / %d", day, month, year));
+                dtBirthdate.setText(String.format("%d / %d / %d", day, month + 1, year));
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year, month, day);
@@ -180,6 +181,9 @@ public class RegisterActivity extends AppCompatActivity implements  DatePickerDi
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
+                toast.show();
+
                 lblErrorMessage.setVisibility(View.VISIBLE);
                 lblErrorMessage.setText(message);
             }

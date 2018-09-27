@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements
 
     SearchUserFragment searchUserFragment;
 
+    Fragment currentFragment;
+
 
     //endregion Declarations
 
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                System.out.println("lolaze");
+                ChangeView(getText(R.string.activityMainNews), NewsFragments.newInstance());
                 return false;
             }
         });
@@ -151,6 +153,9 @@ public class MainActivity extends AppCompatActivity implements
                 transaction.replace(R.id.frameLayout, searchUserFragment);
                 transaction.commit();
 
+                currentFragment = searchUserFragment;
+
+
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -166,7 +171,8 @@ public class MainActivity extends AppCompatActivity implements
             public boolean onQueryTextChange(String s) {
                 //ChangeView(getText(R.string.activityMainSessions), SearchUserFragment.newInstance(s));
                 //return true;
-                searchUserFragment.RefreshUserList(s);
+                //searchUserFragment.RefreshUserList(s);
+                SearchUser(s);
                 return true;
             }
         });
@@ -193,9 +199,17 @@ public class MainActivity extends AppCompatActivity implements
         transaction.replace(R.id.frameLayout, fragment);
         transaction.commit();
 
-
+        currentFragment = fragment;
     }
 
+
+    private void SearchUser(String str) {
+
+        if (currentFragment != searchUserFragment) {
+            ChangeView("", searchUserFragment);
+        }
+        searchUserFragment.RefreshUserList(str);
+    }
 
     //endregion Fragments Implementations
 
