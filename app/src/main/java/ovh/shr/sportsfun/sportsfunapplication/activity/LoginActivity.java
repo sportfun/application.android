@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,13 +30,16 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.ResponseBody;
 import ovh.shr.sportsfun.sportsfunapplication.R;
 import ovh.shr.sportsfun.sportsfunapplication.SportsFunApplication;
 import ovh.shr.sportsfun.sportsfunapplication.models.User;
+import ovh.shr.sportsfun.sportsfunapplication.network.API;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.JsonHelper;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,18 +49,15 @@ public class LoginActivity extends AppCompatActivity
 
     //region Declarations
 
-    private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
-
-
-    private ProgressDialog progressDialog;
-
     @BindView(R.id.lblErrorMessage) TextView lblErrorMessage;
+    @BindView(R.id.lblUsername) TextInputLayout lblUsername;
+    @BindView(R.id.lblPassword) TextInputLayout lblPassword;
     @BindView(R.id.txtUsername) EditText txtUsername;
     @BindView(R.id.txtPassword) EditText txtPassword;
-
     @BindView(R.id.btnSubmit) Button btnSubmit;
     @BindView(R.id.lblLinkSignUp) TextView lblLinkSignUp;
+
+    private ProgressDialog progressDialog;
 
     //endregion Declarations
 
@@ -66,288 +68,136 @@ public class LoginActivity extends AppCompatActivity
 
         SportsFunApplication.setContext(getApplicationContext());
 
-        try {
-            JsonObject json = SportsFunApplication.getUserLogins();
-            if (json.get("username").getAsString() != "") {
-                SignIn(json.get("username").getAsString(), json.get("password").getAsString());
-                return;
-            }
-
-        } catch (Exception err) {
-
-        }
-
         setContentView(R.layout.login_activity);
         ButterKnife.bind(this);
+        setVisibility(View.VISIBLE);
 
+        try {
+            JsonObject json = SportsFunApplication.getUserLogins();
+            if (json.has("username") && json.has("password") && json.get("username").getAsString() != "") {
 
-        //region Click on Submit button
-
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                lblErrorMessage.setVisibility(View.INVISIBLE);
-                SignIn(txtUsername.getText().toString(), txtPassword.getText().toString());
+                setVisibility(View.INVISIBLE);
+                Login(json.get("username").getAsString(), json.get("password").getAsString());
             }
-        });
-        //endregion Click on Submit button
 
-        //region Create Account
+        } catch (Exception error) {
 
-        lblLinkSignUp.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-                finish();
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
-        });
-
-        //endregion Create Account
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
-        return super.onOptionsItemSelected(item);
     }
 
 
+    //region Buttons
 
-    public void SignIan(final String username, final String password)
+    @OnClick(R.id.btnSubmit)
+    public void btnSubmit_OnClick()
     {
-        progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage(getApplicationContext().getString(R.string.progressSignIn));
-        progressDialog.show();
-        progressDialog.setCancelable(false);
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("username", username);
-        jsonObject.addProperty("password", password);
-
-
-        NetworkManager.PostRequest("api/user/login", jsonObject, RequestType.POST, new okhttp3.Callback() {
-
-            @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-
-                if (response.isSuccessful()) {
-                    try {
-
-                        Gson gson = new GsonBuilder().create();
-                        JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
-                        SportsFunApplication.setAuthentificationToken(json.getAsJsonObject("data").get("token").getAsString());
-                        NetworkManager.PostRequest("api/user", null, RequestType.GET, new okhttp3.Callback() {
-
-                            @Override
-                            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                                progressDialog.dismiss();
-
-                                Gson gson = new GsonBuilder().create();
-                                JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
-
-                                User user = gson.fromJson(json.get("data").getAsJsonObject(), User.class);
-
-                                SportsFunApplication.setCurrentUser(user);
-
-                                SportsFunApplication.SaveUserLogins(username, password);
-                                Intent i = new Intent(getBaseContext(), MainActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(i);
-                                finish();
-
-                            }
-
-                            @Override
-                            public void onFailure(okhttp3.Call call, IOException e) {
-                                e.printStackTrace();
-
-                                progressDialog.dismiss();
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        lblErrorMessage.setVisibility(View.VISIBLE);
-                                        lblErrorMessage.setText(getBaseContext().getString(R.string.lblErrorAuthMessage));
-                                    }
-                                });
-
-                            }
-
-                        });
-
-                    } catch (Exception e) {
-                        progressDialog.dismiss();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                lblErrorMessage.setVisibility(View.VISIBLE);
-                                lblErrorMessage.setText(getBaseContext().getString(R.string.connectionerror));
-                            }
-                        });
-                        e.printStackTrace();
-                    }
-                } else
-                {
-                    Gson gson = new GsonBuilder().create();
-                    JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
-
-                    String errorMessage = json.get("message").getAsString();
-
-                    progressDialog.dismiss();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            lblErrorMessage.setVisibility(View.VISIBLE);
-                            lblErrorMessage.setText(getBaseContext().getString(R.string.lblErrorAuthMessage));
-                        }
-                    });
-
-                }
-            }
-
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                progressDialog.dismiss();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        lblErrorMessage.setVisibility(View.VISIBLE);
-                        lblErrorMessage.setText(getBaseContext().getString(R.string.connectionerror));
-                    }
-                });
-            }
-
-        });
+        lblErrorMessage.setVisibility(View.INVISIBLE);
+        Login(txtUsername.getText().toString(), txtPassword.getText().toString());
     }
 
+    @OnClick(R.id.lblLinkSignUp)
+    public void lblLinkSignUp_OnClick()
+    {
+        Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivityForResult(intent, 0);
+        finish();
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
 
-
-
-
-
+    //endregion Buttons
 
     //region Private methods
 
-    private void SignIn(final String username, final String password) {
-        System.out.println("TEST1");
-        DisplayAuthentificationMessage();
-
-        JsonObject newJsonObject = new JsonObject();
-        newJsonObject.addProperty("username", username);
-        newJsonObject.addProperty("password", password);
-
-        NetworkManager.PostRequest("api/user/login", newJsonObject, RequestType.POST, new okhttp3.Callback() {
-
-            @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-
-                if (response.isSuccessful()) {
-
-                    JsonObject json = JsonHelper.GetJsonObject(response.body().string());
-                    SportsFunApplication.setAuthentificationToken(json.getAsJsonObject("data").get("token").getAsString());
-                    SportsFunApplication.SaveUserLogins(username, password);
-                    GetUserInformations();
-                }
-                else
-                {
-                    progressDialog.dismiss();
-                    JsonObject json = JsonHelper.GetJsonObject(response.body().string());
-                    if (json.get("message").getAsString().contains("Missing key")) {
-                        DisplayErrorMessage(getText(R.string.lblErrorMessageMissingFields));
-                    }
-
-                    if (json.get("message").getAsString().contains("Incorrect password") || json.get("message").getAsString().contains("does not exist")) {
-                        DisplayErrorMessage(getText(R.string.incorrectPassword));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                e.printStackTrace();
-                progressDialog.dismiss();
-                DisplayErrorMessage(getText(R.string.connectionerror));
-            }
-
-        });
-
-    }
-
-    public void GetUserInformations() {
-        System.out.println("TEST2");
-
-        NetworkManager.PostRequest("api/user", null, RequestType.GET, new okhttp3.Callback() {
-
-            @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                progressDialog.dismiss();
-
-                Gson gson = new GsonBuilder().create();
-                JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
-                User user = gson.fromJson(json.get("data").getAsJsonObject(), User.class);
-                SportsFunApplication.setCurrentUser(user);
-
-                Intent i = new Intent(getBaseContext(), MainActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                finish();
-
-            }
-
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                e.printStackTrace();
-                progressDialog.dismiss();
-                DisplayErrorMessage(getText(R.string.lblErrorAuthMessage));
-
-            }
-
-        });
-
-    }
-
-    private void DisplayAuthentificationMessage() {
-        progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage(getApplicationContext().getString(R.string.progressSignIn));
-        progressDialog.show();
-        progressDialog.setCancelable(false);
-    }
-
-    private void DisplayErrorMessage(final CharSequence message) {
+    private void DisplayError(final CharSequence message) {
 
         runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
+
+                Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
+                toast.show();
+
                 lblErrorMessage.setVisibility(View.VISIBLE);
                 lblErrorMessage.setText(message);
             }
 
         });
+    }
 
+    private void StartProgressDialog() {
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage(getApplicationContext().getString(R.string.progressSignIn));
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+    }
+
+    private void StopProgressDialog() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void setVisibility(int visibility) {
+
+        btnSubmit.setVisibility(visibility);
+        lblLinkSignUp.setVisibility(visibility);
+        lblUsername.setVisibility(visibility);
+        txtUsername.setVisibility(visibility);
+        lblPassword.setVisibility(visibility);
+        txtPassword.setVisibility(visibility);
+
+    }
+
+    private void StartMainActivity() {
+
+        Intent i = new Intent(getBaseContext(), MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+        finish();
+
+    }
+
+    private void Login(String username, String password) {
+        StartProgressDialog();
+        API.Login(username, password, new SCallback() {
+
+            @Override
+            public void onTaskCompleted(JsonObject result) {
+
+                StopProgressDialog();
+
+                if (result.has("success") && result.get("success").getAsBoolean() == false) {
+                    switch (result.get("message").getAsString()) {
+
+                        case "failed_to_connect":
+                            DisplayError(getText(R.string.connectionerror));
+                            break;
+
+                        case "Access forbidden":
+                        case "Missing key 'username' in body":
+                        case "Missing key 'password' in body":
+                            DisplayError(getText(R.string.lblErrorAuthMessage));
+                            break;
+                    }
+                    setVisibility(View.VISIBLE);
+                } else {
+
+                    API.RefreshLocalUserData(new SCallback() {
+                        @Override
+                        public void onTaskCompleted(JsonObject result) {
+                            StartMainActivity();
+                        }
+                    });
+
+                }
+            }
+        });
     }
 
     //endregion Private methods

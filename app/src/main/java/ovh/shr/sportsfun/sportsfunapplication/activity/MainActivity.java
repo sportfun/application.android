@@ -1,24 +1,35 @@
 package ovh.shr.sportsfun.sportsfunapplication.activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.health.SystemHealthManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.blikoon.qrcodescanner.QrCodeActivity;
+import com.google.gson.JsonObject;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import butterknife.BindView;
@@ -29,6 +40,8 @@ import ovh.shr.sportsfun.sportsfunapplication.fragments.NewsFragments;
 import ovh.shr.sportsfun.sportsfunapplication.fragments.SearchUserFragment;
 import ovh.shr.sportsfun.sportsfunapplication.fragments.SessionsFragments;
 import ovh.shr.sportsfun.sportsfunapplication.fragments.SettingsFragments;
+import ovh.shr.sportsfun.sportsfunapplication.network.API;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
 
 public class MainActivity extends AppCompatActivity implements
         NewsFragments.OnFragmentInteractionListener,
@@ -49,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements
 
     Fragment currentFragment;
 
-
+    private static final int REQUEST_CODE_QR_SCAN = 101;
+    private static final int REQUEST_PERMISSION_CAMERA_CODE = 10000;
     //endregion Declarations
 
     //region Constructor
@@ -92,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements
                     return true;
 
                 case R.id.navigation_messages:
-                    ChangeView(getText(R.string.activityMainSessions), MessagesFragment.newInstance());
+                    ChangeView(getText(R.string.activityMainMessages), MessagesFragment.newInstance());
                     return true;
 
                 case R.id.navigation_settingsmenu:
@@ -107,19 +121,15 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.action_settings:
-//                // User chose the "Settings" item, show the app settings UI...
-//                return true;
-//
+
             case R.id.action_search:
+                return true;
 
-                System.out.println("lol");
-
+            case R.id.action_scan:
+                RequestAccessCamera();
                 return true;
 
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
         }
@@ -127,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.titlebar_main, menu);
 
         MenuItem item = menu.findItem(R.id.action_search);
@@ -213,5 +222,137 @@ public class MainActivity extends AppCompatActivity implements
 
     //endregion Fragments Implementations
 
+    //region QrCode
+
+    private void RequestAccessCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+
+                Toast toast = Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_LONG);
+                toast.show();
+
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},REQUEST_PERMISSION_CAMERA_CODE);
+            }
+        } else {
+            OpenCamera();
+        }
+    }
+
+    private void OpenCamera() {
+
+        Intent i = new Intent(MainActivity.this, QrCodeActivity.class);
+        startActivityForResult(i, REQUEST_CODE_QR_SCAN);
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(resultCode != Activity.RESULT_OK)
+        {
+            if(data==null)
+                return;
+            //Getting the passed result
+            String result = data.getStringExtra("com.blikoon.qrcodescanner.error_decoding_image");
+            if( result!=null)
+            {
+                DisplayAlert("QR Code", "Une erreur est survenu lors du scan du QR Code");
+            }
+            return;
+
+        }
+
+        if(requestCode == REQUEST_CODE_QR_SCAN)
+        {
+            if(data==null)
+                return;
+
+            final String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+            if (result.startsWith("sportsfun:")) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        API.SendQRCode(result, new SCallback() {
+
+                            @Override
+                            public void onTaskCompleted(JsonObject result) {
+                                DisplayAlert("QR Code", "Connexion est en cours...");
+                            }
+                        });
+
+                    }
+                });
+
+            } else {
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                alertDialog.setTitle("QR Code");
+                alertDialog.setMessage("Le QR Code n'est pas un QR Code Sportsfun valide.");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Fermer",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Réessayer",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                RequestAccessCamera();
+                            }
+                        });
+                alertDialog.show();
+
+                }
+        }
+    }
+
+    private void DisplayAlert(final String title, final String message) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                alertDialog.setTitle(title);
+                alertDialog.setMessage(message);
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Fermer",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            }
+        });
+
+
+    }
+
+    //endregion QrCode
+
+
+    //region Permissions
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSION_CAMERA_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    OpenCamera();
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Permission denied2", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                return;
+            }
+        }
+    }
+
+    //endregion Permissions
 
 }

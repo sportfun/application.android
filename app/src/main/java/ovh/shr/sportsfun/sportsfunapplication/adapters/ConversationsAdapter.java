@@ -155,7 +155,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
                     JsonObject receiver = obj.get("to").getAsJsonObject();
 
                     if (SportsFunApplication.getCurrentUser().getId().equals(author.get("_id").getAsString())) {
-                        entity.setAuthor(receiver.get("firstName").getAsString() + receiver.get("lastName").getAsString());
+                        entity.setAuthor(receiver.get("firstName").getAsString() + " " + receiver.get("lastName").getAsString());
                         entity.setAuthorId(receiver.get("_id").getAsString());
                         entity.setProfilPic(receiver.get("profilePic").getAsString());
                     } else
@@ -167,9 +167,6 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
 
                     entity.setId(obj.get("_id").getAsString());
                     entity.setCreatedAt(DateHelper.fromISO8601UTC(obj.get("createdAt").getAsString()));
-
-                    //entity.setAuthor(obj.get("author").getAsString());
-
                     entity.setContent(obj.get("content").getAsString());
                     dataList.add(entity);
                 }

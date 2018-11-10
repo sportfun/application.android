@@ -82,19 +82,13 @@ public class API {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("lol2");
-
                 if (response.isSuccessful()) {
                     Gson gson = new GsonBuilder().create();
                     JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
-                    System.out.println("lol3");
-
-
                     if (callback != null)
                     {
                         callback.onTaskCompleted(json);
@@ -102,8 +96,6 @@ public class API {
                 } else {
                     if (callback != null)
                     {
-                        System.out.println("lol4");
-
                         JsonObject tmp = new JsonObject();
                         tmp.addProperty("success", false);
                         callback.onTaskCompleted(tmp);
@@ -154,5 +146,119 @@ public class API {
 
     }
 
+    public static void Login(final String username, final String password, final SCallback callback)  {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("username", username);
+        jsonObject.addProperty("password", password);
+
+        NetworkManager.PostRequest("api/user/login", jsonObject, RequestType.POST, new  okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+                JsonObject tmp = new JsonObject();
+                tmp.addProperty("success", false);
+                tmp.addProperty("message", "failed_to_connect");
+                callback.onTaskCompleted(tmp);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Gson gson = new GsonBuilder().create();
+                JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
+
+                if (response.isSuccessful()) {
+                    if (callback != null)
+                    {
+                        SportsFunApplication.SaveUserLogins(username, password);
+                        SportsFunApplication.setAuthentificationToken(json.getAsJsonObject("data").get("token").getAsString());
+                        callback.onTaskCompleted(json);
+                    }
+                } else {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                }
+            }
+
+        });
+
+    }
+
+    public static void Register(JsonObject jsonObject, final SCallback callback) {
+
+
+        NetworkManager.PostRequest("api/user", jsonObject, RequestType.POST, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                JsonObject result = new JsonObject();
+                result.addProperty("success", false);
+                result.addProperty("message", "failed_to_connect");
+                callback.onTaskCompleted(result);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Gson gson = new GsonBuilder().create();
+                JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
+
+                if (response.isSuccessful()) {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                } else {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                }
+            }
+
+        } );
+
+    }
+
+
+    public static void SendQRCode(final String code, final SCallback callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("content", code);
+
+
+        NetworkManager.PostRequest("api/qr", jsonObject, RequestType.POST, new  okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+                JsonObject tmp = new JsonObject();
+                tmp.addProperty("success", false);
+                tmp.addProperty("message", "failed_to_connect");
+                callback.onTaskCompleted(tmp);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Gson gson = new GsonBuilder().create();
+                JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
+
+                if (response.isSuccessful()) {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                } else {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                }
+            }
+
+        });
+
+    }
 
 }

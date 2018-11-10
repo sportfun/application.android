@@ -12,7 +12,7 @@
 
     <item android:id="@+id/action_scan"
         android:title="Scan"
-        android:icon="@drawable/baseline_select_all_24"
+        android:icon="@drawable/qrwhite"
         app:showAsAction="always"
         />
 

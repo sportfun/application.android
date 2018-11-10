@@ -18,9 +18,12 @@ import ovh.shr.sportsfun.sportsfunapplication.SportsFunApplication;
 public class NetworkManager {
 
     //region Declarations
-
+//
     public static final String BASE_API_URL = "http://api.sportsfun.shr.ovh:8080/";
     public static final String BASE_CDN = "http://api.sportsfun.shr.ovh:8080";
+
+//    public static final String BASE_API_URL = "http://10.0.2.2:8080/";
+//    public static final String BASE_CDN = "http://10.0.2.2:8080";
 
     private static final OkHttpClient client = new OkHttpClient();
 

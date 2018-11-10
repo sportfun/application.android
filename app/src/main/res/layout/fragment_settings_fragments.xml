@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="ovh.shr.sportsfun.sportsfunapplication.fragments.SettingsFragments"
-    android:background="@color/white"
-    >
+    android:background="@color/lightgrey">
 
 
     <LinearLayout
@@ -14,9 +14,12 @@
 
         <FrameLayout
             android:id="@+id/btnViewProfil"
-            style="@style/Widget.AppCompat.Button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="70dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -57,9 +60,12 @@
 
         <FrameLayout
             android:id="@+id/btnIdentity"
-            style="@style/Widget.AppCompat.Button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="70dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -98,9 +104,12 @@
 
         <FrameLayout
             android:id="@+id/btnPassword"
-            style="@style/Widget.AppCompat.Button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="70dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -139,10 +148,12 @@
 
         <FrameLayout
             android:id="@+id/btnBio"
-            style="@style/Widget.AppCompat.Button"
-
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="70dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -181,9 +192,12 @@
 
         <FrameLayout
             android:id="@+id/btnLogout"
-            style="@style/Widget.AppCompat.Button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"

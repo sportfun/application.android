@@ -32,6 +32,7 @@
             android:visibility="invisible" />
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/lblUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -47,6 +48,7 @@
 
         <!-- Password Label -->
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/lblPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

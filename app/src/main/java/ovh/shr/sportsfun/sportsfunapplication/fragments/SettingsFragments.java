@@ -133,6 +133,7 @@ public class SettingsFragments extends Fragment {
 
         Intent i = new Intent(getContext(), UserInfoActivity.class);
         i.putExtra("isLocalUser", true);
+        i.putExtra("_id", SportsFunApplication.getCurrentUser().getId());
         startActivity(i);
 
     }
