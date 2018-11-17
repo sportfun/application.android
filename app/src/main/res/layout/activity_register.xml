@@ -16,13 +16,6 @@
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
 
-            <ImageView
-                android:layout_width="283dp"
-                android:layout_height="72dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="24dp"
-                android:src="@drawable/logo" />
-
             <TextView
                 android:id="@+id/lblErrorMessage"
                 android:layout_width="match_parent"

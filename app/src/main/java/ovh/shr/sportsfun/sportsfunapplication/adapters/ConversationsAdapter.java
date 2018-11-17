@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -30,6 +31,7 @@ import ovh.shr.sportsfun.sportsfunapplication.R;
 import ovh.shr.sportsfun.sportsfunapplication.SportsFunApplication;
 import ovh.shr.sportsfun.sportsfunapplication.activity.MessageActivity;
 import ovh.shr.sportsfun.sportsfunapplication.models.Conversations;
+import ovh.shr.sportsfun.sportsfunapplication.models.Message;
 import ovh.shr.sportsfun.sportsfunapplication.models.User;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
@@ -120,6 +122,53 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
     @Override
     public int getItemCount(){
         return dataList.size();
+    }
+
+    public void reset() {
+        dataList.clear();
+    }
+
+    public void addItem(JsonObject obj) {
+
+        System.out.println(obj.toString());
+
+
+        Conversations.ConversationEntity entity = new Conversations.ConversationEntity();
+
+        entity.setId(obj.get("id").getAsString());
+        obj = obj.get("message").getAsJsonObject();
+        JsonObject author = obj.get("author").getAsJsonObject();
+        JsonObject receiver = obj.get("to").getAsJsonObject();
+
+        if (SportsFunApplication.getCurrentUser().getId().equals(author.get("_id").getAsString())) {
+            entity.setAuthor(receiver.get("firstName").getAsString() + " " + receiver.get("lastName").getAsString());
+            entity.setAuthorId(receiver.get("_id").getAsString());
+            entity.setProfilPic(receiver.get("profilePic").getAsString());
+        } else
+        {
+            entity.setAuthor(author.get("firstName").getAsString() + " " + author.get("lastName").getAsString());
+            entity.setAuthorId(author.get("_id").getAsString());
+            entity.setProfilPic(author.get("profilePic").getAsString());
+        }
+
+        entity.setId(obj.get("_id").getAsString());
+        entity.setCreatedAt(DateHelper.fromISO8601UTC(obj.get("createdAt").getAsString()));
+        entity.setContent(obj.get("content").getAsString());
+        dataList.add(entity);
+        dataList.sort(new Comparator<Conversations.ConversationEntity>() {
+            @Override
+            public int compare(Conversations.ConversationEntity message, Conversations.ConversationEntity t1) {
+                return t1.getCreatedAt().compareTo(message.getCreatedAt());
+            }
+        });
+
+        currentActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
+
     }
 
     public void refreshDatas()

@@ -35,12 +35,14 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ovh.shr.sportsfun.sportsfunapplication.R;
+import ovh.shr.sportsfun.sportsfunapplication.SportsFunApplication;
 import ovh.shr.sportsfun.sportsfunapplication.fragments.MessagesFragment;
 import ovh.shr.sportsfun.sportsfunapplication.fragments.NewsFragments;
 import ovh.shr.sportsfun.sportsfunapplication.fragments.SearchUserFragment;
 import ovh.shr.sportsfun.sportsfunapplication.fragments.SessionsFragments;
 import ovh.shr.sportsfun.sportsfunapplication.fragments.SettingsFragments;
 import ovh.shr.sportsfun.sportsfunapplication.network.API;
+import ovh.shr.sportsfun.sportsfunapplication.network.SocketIOHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
 
 public class MainActivity extends AppCompatActivity implements
@@ -84,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements
         transaction = manager.beginTransaction();
         transaction.replace(R.id.frameLayout, NewsFragments.newInstance()); // newInstance() is a static factory method.
         transaction.commit();
+
+        SocketIOHelper.Connect();
 
     }
 
@@ -272,15 +276,38 @@ public class MainActivity extends AppCompatActivity implements
 
             final String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
             if (result.startsWith("sportsfun:")) {
+
+                System.out.println(result);
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
-                        API.SendQRCode(result, new SCallback() {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                        alertDialog.setTitle("QR Code");
+                        alertDialog.setMessage("Connexion est en cours...");
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Fermer",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
 
+                        API.SendQRCode(result, new SCallback() {
                             @Override
                             public void onTaskCompleted(JsonObject result) {
-                                DisplayAlert("QR Code", "Connexion est en cours...");
+                                System.out.println("*********************");
+                                System.out.println(result.toString());
+                                if (result.has("success") && result.get("success").getAsBoolean())
+                                {
+                                    alertDialog.dismiss();
+                                    DisplayAlert("QR Code", "Connexion réussie");
+
+                                } else {
+                                    alertDialog.dismiss();
+                                    DisplayAlert("QR Code", "Le QR Code n'est pas reconnu");
+                                }
                             }
                         });
 
@@ -297,6 +324,7 @@ public class MainActivity extends AppCompatActivity implements
                                 dialog.dismiss();
                             }
                         });
+
                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Réessayer",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {

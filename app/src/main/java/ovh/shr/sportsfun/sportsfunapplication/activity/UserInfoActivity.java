@@ -1,10 +1,13 @@
 package ovh.shr.sportsfun.sportsfunapplication.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -17,6 +20,8 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
+import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -36,27 +41,31 @@ public class UserInfoActivity extends AppCompatActivity {
     private String _id;
     private Boolean isLocalUser = false;
     private User userDatas;
+    private Activity activity;
 
-    @BindView(R.id.btnSendMessage) AppCompatButton btnSendMessage;
-    @BindView(R.id.btnFollow) AppCompatButton btnFollow;
-    @BindView(R.id.txtFullname) TextView txtFullname;
-    @BindView(R.id.avatar) CircleImageView avatar;
-    @BindView(R.id.txtBiographie) TextView txtBiographie;
+    @Nullable @BindView(R.id.btnSendMessage) AppCompatButton btnSendMessage;
+    @Nullable @BindView(R.id.btnFollow) AppCompatButton btnFollow;
+    @Nullable @BindView(R.id.txtFullname) TextView txtFullname;
+    @Nullable @BindView(R.id.txtBiographie) TextView txtBiographie;
+
+    @Nullable @BindView(R.id.avatar) CircleImageView avatar;
+    @Nullable @BindView(R.id.userinfo_header) LinearLayout userinfo_header;
+
+    private Unbinder unbinder;
 
     //endregion Decalarations
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_userinfos);
+        activity = this;
 
-        Bundle b = getIntent().getExtras();
-        isLocalUser = b.getBoolean("isLocalUser");
-        _id = b.getString("_id");
+        Bundle bundle = getIntent().getExtras();
+        isLocalUser = bundle.getBoolean("isLocalUser");
+        _id = bundle.getString("_id");
         if (_id.equals(SportsFunApplication.getCurrentUser().getId()))
             isLocalUser = true;
-        ButterKnife.bind(this);
-        LoadDatas();
+        LoadView();
     }
 
     @Override
@@ -67,6 +76,40 @@ public class UserInfoActivity extends AppCompatActivity {
 
 
     //region Private methods
+
+    private void LoadView() {
+
+        if (unbinder != null)
+            unbinder.unbind();
+
+        API.GetUser(_id, new SCallback() {
+
+            @Override
+            public void onTaskCompleted(final JsonObject result) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result.has("success") && result.get("success").getAsBoolean() == false) {
+                            setContentView(R.layout.activity_interneterror);
+                            unbinder = ButterKnife.bind(this, activity);
+                        } else
+                        {
+                            setContentView(R.layout.activity_userinfos);
+                            unbinder = ButterKnife.bind(this, activity);
+                            Gson gson = new Gson();
+                            userDatas = gson.fromJson(result.get("data").getAsJsonObject(), User.class);
+                            txtFullname.setText(userDatas.getFullName());
+                        }
+                    }
+                });
+
+            }
+
+        });
+
+
+    }
 
     private void LoadDatas()
     {
@@ -88,6 +131,9 @@ public class UserInfoActivity extends AppCompatActivity {
         }
 
 
+
+
+
         NetworkManager.PostRequest(endpoint, null, RequestType.GET, new  okhttp3.Callback() {
 
             @Override
@@ -106,7 +152,7 @@ public class UserInfoActivity extends AppCompatActivity {
                     JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
 
                     userDatas = gson.fromJson(json.get("data").getAsJsonObject(), User.class);
-                    userDatas.setProfilPicUrl(userDatas.getProfilePic());
+                    userDatas.setProfilPicUrl(userDatas.getProfilPicUrl());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -132,7 +178,7 @@ public class UserInfoActivity extends AppCompatActivity {
     //endregion Private methods
 
 
-    @OnClick(R.id.btnFollow)
+    @OnClick(R.id.btnFollow) @Optional
     public void OnBtnFollowClick()
     {
 
@@ -163,7 +209,7 @@ public class UserInfoActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.btnSendMessage)
+    @OnClick(R.id.btnSendMessage) @Optional
     public void OnBtnSendMessageClick()
     {
 
@@ -174,5 +220,11 @@ public class UserInfoActivity extends AppCompatActivity {
 
         startActivity(newIntent);
 
+    }
+
+    @OnClick(R.id.btnReload) @Optional
+    public void btnReload_OnClick()
+    {
+        LoadView();
     }
 }

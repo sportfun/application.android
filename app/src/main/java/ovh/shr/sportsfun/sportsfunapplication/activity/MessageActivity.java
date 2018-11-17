@@ -14,6 +14,9 @@ import android.support.v7.widget.Toolbar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,11 +25,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.socket.emitter.Emitter;
 import ovh.shr.sportsfun.sportsfunapplication.R;
 import ovh.shr.sportsfun.sportsfunapplication.adapters.MessageListAdapter;
 import ovh.shr.sportsfun.sportsfunapplication.models.Message;
 import ovh.shr.sportsfun.sportsfunapplication.models.User;
 import ovh.shr.sportsfun.sportsfunapplication.network.API;
+import ovh.shr.sportsfun.sportsfunapplication.network.SocketIOHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.DateHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
 
@@ -68,8 +73,17 @@ public class MessageActivity extends AppCompatActivity {
         this.messageListAdapter = new MessageListAdapter(this.getApplicationContext(), dataList);
         this.lvMessages.setAdapter(this.messageListAdapter);
 
-        GetConversation();
+        SocketIOHelper.openChannel("conversation", onConversationReceived);
 
+        try {
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", partnerID);
+            SocketIOHelper.emit("conversation", jsonObject);
+
+        } catch (Exception error) {
+
+        }
     }
 
     //endregion Android Specific
@@ -85,6 +99,31 @@ public class MessageActivity extends AppCompatActivity {
     //endregion Menu
 
     //region Private methods
+
+    private Emitter.Listener onConversationReceived = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+
+            JSONObject JSONObject = (JSONObject) args[0];
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jsonObject = (JsonObject) jsonParser.parse(JSONObject.toString());
+
+            System.out.println(jsonObject.toString());
+
+            //conversationsAdapter.addItem(jsonObject.get("message").getAsJsonObject());
+
+/*            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refresher.setRefreshing(false);
+                }
+            });*/
+
+
+
+        }
+    };
+
 
     private void GetConversation()
     {

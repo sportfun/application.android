@@ -73,7 +73,41 @@ public class API {
 
     }
 
+    public static void GetUser(String userID, final SCallback callback) {
 
+        NetworkManager.PostRequest("api/user" + ( userID != null ? '/' + userID : "" ), null, RequestType.GET, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("success", false);
+                jsonObject.addProperty("message", "failed_to_connect");
+                callback.onTaskCompleted(jsonObject);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    Gson gson = new GsonBuilder().create();
+                    JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                } else {
+                    if (callback != null)
+                    {
+                        JsonObject tmp = new JsonObject();
+                        tmp.addProperty("success", false);
+                        callback.onTaskCompleted(tmp);
+                    }
+                }
+            }
+        });
+
+
+
+    }
 
     public static void GetConversation(String parnterID, final SCallback callback)
     {
@@ -225,10 +259,10 @@ public class API {
     public static void SendQRCode(final String code, final SCallback callback) {
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("content", code);
+        jsonObject.addProperty("qr", code);
 
 
-        NetworkManager.PostRequest("api/qr", jsonObject, RequestType.POST, new  okhttp3.Callback() {
+        NetworkManager.PostRequest("api/qr", jsonObject, RequestType.PUT, new  okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
