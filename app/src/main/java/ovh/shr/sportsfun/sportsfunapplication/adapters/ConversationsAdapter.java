@@ -128,10 +128,19 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
         dataList.clear();
     }
 
+    private Boolean isExist(String id) {
+
+        for (Conversations.ConversationEntity entity : dataList) {
+
+            if (entity.getId().equals(id))
+                return true;
+        }
+        return false;
+    }
+
     public void addItem(JsonObject obj) {
 
         System.out.println(obj.toString());
-
 
         Conversations.ConversationEntity entity = new Conversations.ConversationEntity();
 

@@ -109,12 +109,15 @@ public class MessagesFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        SocketIOHelper.closeChannel("snippets", onSnippetsReceived);
+        SocketIOHelper.openChannel("snippets", onSnippetsReceived);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        SocketIOHelper.closeChannel("snippets", onSnippetsReceived);
     }
 
     public interface OnFragmentInteractionListener {
@@ -127,15 +130,16 @@ public class MessagesFragment extends Fragment {
         unbinder.unbind();
 
         SocketIOHelper.closeChannel("snippets", onSnippetsReceived);
-        SocketIOHelper.closeChannel("conversation", onSnippetsReceived);
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
+        SocketIOHelper.closeChannel("snippets", onSnippetsReceived);
         SocketIOHelper.openChannel("snippets", onSnippetsReceived);
-        SocketIOHelper.openChannel("conversation", onSnippetsReceived);
+
+        RefreshDatas();
 
     }
     //endregion Android Specific
@@ -145,6 +149,7 @@ public class MessagesFragment extends Fragment {
     private void RefreshDatas()
     {
         conversationsAdapter.reset();
+
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("token", SportsFunApplication.getAuthentificationToken());
@@ -167,6 +172,7 @@ public class MessagesFragment extends Fragment {
             JsonParser jsonParser = new JsonParser();
             JsonObject jsonObject = (JsonObject) jsonParser.parse(JSONObject.toString());
             conversationsAdapter.addItem(jsonObject);
+
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override

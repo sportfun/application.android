@@ -19,6 +19,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,7 +45,9 @@ import ovh.shr.sportsfun.sportsfunapplication.fragments.SessionsFragments;
 import ovh.shr.sportsfun.sportsfunapplication.fragments.SettingsFragments;
 import ovh.shr.sportsfun.sportsfunapplication.network.API;
 import ovh.shr.sportsfun.sportsfunapplication.network.SocketIOHelper;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.NotificationHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 
 public class MainActivity extends AppCompatActivity implements
         NewsFragments.OnFragmentInteractionListener,
@@ -66,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final int REQUEST_CODE_QR_SCAN = 101;
     private static final int REQUEST_PERMISSION_CAMERA_CODE = 10000;
+
+    private SearchView searchView;
     //endregion Declarations
 
     //region Constructor
@@ -88,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements
         transaction.commit();
 
         SocketIOHelper.Connect();
-
+        NotificationHelper.createChannels(getApplicationContext());
     }
 
     //endregion Constructor
@@ -144,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements
         getMenuInflater().inflate(R.menu.titlebar_main, menu);
 
         MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView)item.getActionView();
+        searchView = (SearchView)item.getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -171,9 +177,8 @@ public class MainActivity extends AppCompatActivity implements
 
             }
         });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-
 
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -193,6 +198,15 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!searchView.isIconified()) {
+            searchView.onActionViewCollapsed();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     //endregion Menu
 
     //region Fragments Implementations
@@ -204,7 +218,12 @@ public class MainActivity extends AppCompatActivity implements
 
     private void ChangeView(CharSequence title, Fragment fragment)
     {
-        getSupportActionBar().setTitle(title);
+
+        String txtSports = Utils.getColoredSpanned("Sports", "#1A1A1A");
+        String txtFun = Utils.getColoredSpanned("Fun","#FFFFFF");
+        Spanned test = Html.fromHtml(txtSports + txtFun, 0);
+
+        getSupportActionBar().setTitle(test);
 
         frameLayout.removeAllViews();
         manager = getFragmentManager();

@@ -17,6 +17,15 @@
             android:paddingRight="24dp">
 
             <TextView
+                android:id="@+id/sportsfun"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="80sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/lblErrorMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

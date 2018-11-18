@@ -100,77 +100,60 @@ public class MessageActivity extends AppCompatActivity {
 
     //region Private methods
 
+    private void addMessage(JsonObject jsonObject) {
+
+        Message newMessage = new Message();
+        newMessage.setMessage(jsonObject.get("content").getAsString());
+        newMessage.setAuthor(jsonObject.get("author").getAsJsonObject().get("_id").getAsString());
+        newMessage.setCreationDate(DateHelper.fromISO8601UTC(jsonObject.get("createdAt").getAsString()));
+        dataList.add(newMessage);
+
+    }
+
     private Emitter.Listener onConversationReceived = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-
             JSONObject JSONObject = (JSONObject) args[0];
             JsonParser jsonParser = new JsonParser();
             JsonObject jsonObject = (JsonObject) jsonParser.parse(JSONObject.toString());
 
-            System.out.println(jsonObject.toString());
+            for (JsonElement msgObj : jsonObject.get("messages").getAsJsonArray()) {
+                addMessage(msgObj.getAsJsonObject());
+            }
 
-            //conversationsAdapter.addItem(jsonObject.get("message").getAsJsonObject());
+            dataList.sort(new Comparator<Message>() {
+                @Override
+                public int compare(Message message, Message t1) {
+                    return message.getCreationDate().compareTo(t1.getCreationDate());
+                }
+            });
 
-/*            getActivity().runOnUiThread(new Runnable() {
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    refresher.setRefreshing(false);
+                    messageListAdapter.notifyDataSetChanged();
+                    lvMessages.setSelection(messageListAdapter.getCount() - 1);
+                    txtMessage.setText("");
+
                 }
-            });*/
-
-
+            });
 
         }
     };
 
-
-    private void GetConversation()
-    {
-        API.GetConversation(partnerID, new SCallback() {
-            @Override
-            public void onTaskCompleted(JsonObject result) {
-                JsonArray data = result.get("data").getAsJsonArray();
-                dataList.clear();
-
-                for (JsonElement jsonElement : data) {
-                    JsonObject jsonObject = jsonElement.getAsJsonObject();
-                    Message newMessage = new Message();
-                    newMessage.setMessage(jsonObject.get("content").getAsString());
-                    newMessage.setAuthor(jsonObject.get("author").getAsJsonObject().get("_id").getAsString());
-                    newMessage.setCreationDate(DateHelper.fromISO8601UTC(jsonObject.get("createdAt").getAsString()));
-                    dataList.add(newMessage);
-                }
-
-                dataList.sort(new Comparator<Message>() {
-                    @Override
-                    public int compare(Message message, Message t1) {
-                        return message.getCreationDate().compareTo(t1.getCreationDate());
-                    }
-                });
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        messageListAdapter.notifyDataSetChanged();
-                        lvMessages.setSelection(messageListAdapter.getCount() - 1);
-                        txtMessage.setText("");
-
-                    }
-                });
-
-            }
-        });
-    }
-
     private void SendMessage()
     {
-        API.SendMessage(partnerID, txtMessage.getText().toString().trim(), new SCallback() {
-            @Override
-            public void onTaskCompleted(JsonObject result) {
-                GetConversation();
-            }
-        });
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("to", partnerID);
+            jsonObject.put("content", txtMessage.getText());
+
+            SocketIOHelper.emit("message", jsonObject);
+            txtMessage.setText("");
+
+        } catch (Exception error) {
+            error.printStackTrace();
+        }
     }
 
     //endregion Private methods

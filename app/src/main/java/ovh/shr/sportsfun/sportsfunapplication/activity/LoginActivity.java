@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +41,7 @@ import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.JsonHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,6 +58,8 @@ public class LoginActivity extends AppCompatActivity
     @BindView(R.id.txtPassword) EditText txtPassword;
     @BindView(R.id.btnSubmit) Button btnSubmit;
     @BindView(R.id.lblLinkSignUp) TextView lblLinkSignUp;
+    @BindView(R.id.lblLinkResetPassword) TextView lblLinkResetPassword;
+    @BindView(R.id.sportsfun) TextView sportsfun;
 
     private ProgressDialog progressDialog;
 
@@ -71,6 +75,10 @@ public class LoginActivity extends AppCompatActivity
         setContentView(R.layout.login_activity);
         ButterKnife.bind(this);
         setVisibility(View.VISIBLE);
+
+        String txtSports = Utils.getColoredSpanned("Sports", "#1A1A1A");
+        String txtFun = Utils.getColoredSpanned("Fun","#EA973E");
+        sportsfun.setText(Html.fromHtml(txtSports + txtFun, 0));
 
         try {
             JsonObject json = SportsFunApplication.getUserLogins();
@@ -103,6 +111,15 @@ public class LoginActivity extends AppCompatActivity
         startActivityForResult(intent, 0);
         finish();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
+
+    @OnClick(R.id.lblLinkResetPassword)
+    public void lblLinkResetPassword_OnClick() {
+        Intent intent = new Intent(getApplicationContext(), ResetPassword.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivityForResult(intent, 1);
+        finish();
+        overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
     }
 
     //endregion Buttons
@@ -151,6 +168,7 @@ public class LoginActivity extends AppCompatActivity
         txtUsername.setVisibility(visibility);
         lblPassword.setVisibility(visibility);
         txtPassword.setVisibility(visibility);
+        lblLinkResetPassword.setVisibility(visibility);
 
     }
 

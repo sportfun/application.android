@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ovh.shr.sportsfun.sportsfunapplication">
+
     <meta-data
         android:name="com.google.android.gms.vision.DEPENDENCIES"
-        android:value="barcode"/>
+        android:value="barcode" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
@@ -13,7 +14,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -62,7 +63,8 @@
             android:name=".activity.User.EditUserDataActivty"
             android:label="@string/activityUserData" />
         <activity android:name=".activity.User.EditBioActivity" />
-        <activity android:name=".activity.MessageActivity"></activity>
+        <activity android:name=".activity.MessageActivity" />
+        <activity android:name=".activity.ResetPassword"></activity>
     </application>
 
 </manifest>

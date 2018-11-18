@@ -12,6 +12,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,7 @@ import ovh.shr.sportsfun.sportsfunapplication.network.API;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 
 public class RegisterActivity extends AppCompatActivity implements  DatePickerDialog.OnDateSetListener {
 
@@ -54,6 +56,8 @@ public class RegisterActivity extends AppCompatActivity implements  DatePickerDi
     @BindView(R.id.txtEmail) EditText txtEmail;
     @BindView(R.id.txtFirstname) EditText txtFirstname;
     @BindView(R.id.txtLastname) EditText txtLastname;
+
+    @BindView(R.id.sportsfun) TextView sportsfun;
 
     private Long birthdate;
 
@@ -72,6 +76,9 @@ public class RegisterActivity extends AppCompatActivity implements  DatePickerDi
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
+        String txtSports = Utils.getColoredSpanned("Sports", "#1A1A1A");
+        String txtFun = Utils.getColoredSpanned("Fun","#EA973E");
+        sportsfun.setText(Html.fromHtml(txtSports + txtFun, 0));
 
         //region Birthdate
 

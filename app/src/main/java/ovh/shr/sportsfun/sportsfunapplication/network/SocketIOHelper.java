@@ -23,7 +23,6 @@ public class SocketIOHelper
     private static Socket _socket;
     private static Boolean isConnected = false;
     private static String url = "http://api.sportsfun.shr.ovh:8080/";
-
     private static Emitter onConversationReceive;
 
     //endregion Declarations
