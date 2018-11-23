@@ -1,41 +1,71 @@
 <resources>
 
 
-    <style name="Theme.D.NoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">@color/orange</item>
+    <style name="SportsFunTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- ...and here we setting appcompat’s color theme attrs -->
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="android:colorAccent">@color/primary</item>
+        <item name="android:statusBarColor">@color/primaryDarkColor</item>
     </style>
+
 
     <style name="ToolBarStyle" parent="Theme.AppCompat">
+
+
         <item name="android:background">@color/orange</item>
-        <item name="android:color">@color/orange</item>
+        <item name="android:windowActionBarOverlay">true</item>
 
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
-        <item name="actionMenuTextColor">@android:color/white</item>
-    </style>
+        <!-- Support library compatibility -->
+        <item name="background">@color/orange</item>
+        <item name="windowActionBarOverlay">true</item>
 
-    <style name="HeaderBar">
-        <item name="android:background">#E99210</item>
-    </style>
-
-    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" >
-        <item name="android:background">#E99210</item>
-        <item name="android:textColor">#000</item>
-    </style>
-
-    <style name="GalaxyZooThemeToolbarDarkOverflow" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:textColorPrimary">@color/abc_primary_text_material_light</item>
-        <item name="android:textColorPrimaryInverse">@color/abc_primary_text_material_light</item>
-        <item name="actionMenuTextColor">@color/white</item>
-        <item name="android:textColorSecondary">@color/white</item>
     </style>
 
 
-    <style name="TestOP" parent="Widget.AppCompat.Button">
-        <item name="android:colorButtonNormal">#000</item>
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!-- android:textColorPrimary is the color of the title text in the Toolbar  -->
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="actionMenuTextColor">@color/primary</item>
+
+        <item name="selectableItemBackground">?android:selectableItemBackground</item>
+        <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
+
     </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+    </style>
+
+
+
+    <!--<style name="Theme.D.NoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">-->
+        <!--<item name="windowActionBar">false</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
+        <!--<item name="colorPrimary">@color/orange</item>-->
+    <!--</style>-->
+
+    <!--<style name="ToolBarStyle" parent="Theme.AppCompat">-->
+        <!--<item name="android:background">@color/primaryColor</item>-->
+        <!--<item name="android:color">@color/orange</item>-->
+
+        <!--<item name="android:textColorPrimary">@android:color/white</item>-->
+        <!--<item name="android:textColorSecondary">@android:color/white</item>-->
+        <!--<item name="actionMenuTextColor">@android:color/white</item>-->
+    <!--</style>-->
+
+    <!--<style name="HeaderBar">-->
+        <!--<item name="android:background">#E99210</item>-->
+    <!--</style>-->
+
+    <!--<style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" >-->
+        <!--<item name="android:background">#E99210</item>-->
+        <!--<item name="android:textColor">#000</item>-->
+    <!--</style>-->
+
+
+    <!--<style name="TestOP" parent="Widget.AppCompat.Button">-->
+        <!--<item name="android:colorButtonNormal">#000</item>-->
+    <!--</style>-->
 
     <!-- Base application theme.
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">

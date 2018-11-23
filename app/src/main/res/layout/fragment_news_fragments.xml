@@ -29,7 +29,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="10dp"
         android:src="@drawable/ic_add_white_24dp"
-        app:backgroundTint="@color/orange"
+        app:backgroundTint="@color/secondaryColor"
         />
 
 

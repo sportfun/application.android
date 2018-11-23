@@ -11,18 +11,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
-            android:minHeight="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:titleTextColor="@android:color/white"
-            app:theme="@style/ToolBarStyle"
-            app:menu="@menu/navigation"
-            android:theme="@style/GalaxyZooThemeToolbarDarkOverflow"
-            >
-
-        </android.support.v7.widget.Toolbar>
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/layout_toolbar" />
 
         <LinearLayout
             android:layout_width="match_parent"

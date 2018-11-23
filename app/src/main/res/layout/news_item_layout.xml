@@ -42,7 +42,7 @@
                     android:id="@+id/txtName"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:textColor="@color/primaryColor"
                     android:textSize="@dimen/feed_item_profile_name"
                     android:textStyle="bold"
                     tools:text="Nom de l'utilisateur" />
@@ -115,11 +115,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/ic_thumb_up_black_24dp"
+                android:drawableLeft="@drawable/ic_thumb_up_orange"
                 android:paddingLeft="30dp"
                 android:background="@drawable/feed_leftbutton"
                 android:minHeight="48dp"
-                android:textColor="@color/trans_black"
+                android:textColor="@color/primaryColor"
                 android:textAlignment="textStart"
                 android:text="   J'aime" />
 
@@ -128,11 +128,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/ic_message_black_24dp"
+                android:drawableLeft="@drawable/ic_message_orange"
                 android:paddingLeft="50dp"
                 android:background="@drawable/feed_rightbutton"
                 android:minHeight="48dp"
-                android:textColor="@color/trans_black"
+                android:textColor="@color/primaryColor"
                 android:textAlignment="textStart"
                 android:text="   Commenter" />
         </LinearLayout>

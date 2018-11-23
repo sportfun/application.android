@@ -34,6 +34,8 @@ import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.google.gson.JsonObject;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import java.net.Socket;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ovh.shr.sportsfun.sportsfunapplication.R;
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements
 
     //region Declarations
 
-    @BindView(R.id.my_toolbar) Toolbar androidToolbar;
+    @BindView(R.id.layoutToolbar) Toolbar layoutToolbar;
     @BindView(R.id.frameLayout) FrameLayout frameLayout;
     @BindView(R.id.navigation) BottomNavigationViewEx navigation;
     FragmentManager manager;
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setSupportActionBar(androidToolbar);
+        setSupportActionBar(layoutToolbar);
         getSupportActionBar().setTitle(getText(R.string.activityMainNews));
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.enableShiftingMode(false);
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements
         transaction.replace(R.id.frameLayout, NewsFragments.newInstance()); // newInstance() is a static factory method.
         transaction.commit();
 
+        SocketIOHelper.setContext(getApplicationContext());
         SocketIOHelper.Connect();
         NotificationHelper.createChannels(getApplicationContext());
     }
@@ -219,9 +222,9 @@ public class MainActivity extends AppCompatActivity implements
     private void ChangeView(CharSequence title, Fragment fragment)
     {
 
-        String txtSports = Utils.getColoredSpanned("Sports", "#1A1A1A");
-        String txtFun = Utils.getColoredSpanned("Fun","#FFFFFF");
-        Spanned test = Html.fromHtml(txtSports + txtFun, 0);
+        String txtSports = Utils.getColoredSpanned(title.toString(), "#e67e22");
+        //String txtFun = Utils.getColoredSpanned("Fun","#FFFFFF");
+        Spanned test = Html.fromHtml(txtSports, 0);
 
         getSupportActionBar().setTitle(test);
 

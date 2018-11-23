@@ -39,8 +39,7 @@ public class EditBioActivity extends AppCompatActivity {
 
     @BindView(R.id.txtBiographie) EditText txtBiographie;
     @BindView(R.id.numObjectif) EditText numObjectif;
-    @BindView(R.id.my_toolbar)
-    Toolbar toolbar;
+    @BindView(R.id.layoutToolbar) Toolbar layoutToolbar;
     private ActionBar actionBar;
 
     private ProgressDialog progressDialog;
@@ -55,7 +54,7 @@ public class EditBioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_bio);
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(layoutToolbar);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 

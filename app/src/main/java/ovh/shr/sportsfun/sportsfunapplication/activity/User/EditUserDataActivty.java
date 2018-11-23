@@ -52,7 +52,7 @@ public class EditUserDataActivty extends AppCompatActivity implements  DatePicke
     @BindView(R.id.txtEmail) EditText txtEmail;
     @BindView(R.id.dtBirthdate) EditText dtBirthdate;
 
-    @BindView(R.id.my_toolbar) Toolbar toolbar;
+    @BindView(R.id.layoutToolbar) Toolbar layoutToolbar;
     private ActionBar actionBar;
     private long birthdate;
     DatePickerDialog datePickerDialog;
@@ -68,7 +68,7 @@ public class EditUserDataActivty extends AppCompatActivity implements  DatePicke
         setContentView(R.layout.activity_edit_user_data_activty);
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(layoutToolbar);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 

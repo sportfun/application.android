@@ -222,8 +222,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.selectImage:
-                NotificationHelper.newNotification(getApplicationContext(), "Benjamin Malbrel", "Salut");
-                NotificationHelper.newNotification(getApplicationContext(), "Benjamin Malbrel", "Salupazet");
+
                 NotificationHelper.newNotification2(getApplicationContext(), "Sylvain Garant", "Salut");
 
                 return true;

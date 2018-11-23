@@ -58,9 +58,6 @@ public class MessageListAdapter extends BaseAdapter {
     {
         Message msg = dataList.get(i);
 
-
-        System.out.println(msg.getAuthor() + " - " + SportsFunApplication.getCurrentUser().getId());
-
         if (msg.getAuthor().equals(SportsFunApplication.getCurrentUser().getId()))
             return TYPE_OUT;
         else

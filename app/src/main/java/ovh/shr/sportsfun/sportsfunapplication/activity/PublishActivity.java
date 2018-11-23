@@ -33,7 +33,7 @@ public class PublishActivity extends AppCompatActivity  {
 
     private ActionBar actionBar;
 
-    @BindView(R.id.my_toolbar) Toolbar toolbar;
+    @BindView(R.id.layoutToolbar) Toolbar layoutToolbar;
     @BindView(R.id.txtMessage) EditText txtMessage;
 
     //endregion Declarations
@@ -46,7 +46,7 @@ public class PublishActivity extends AppCompatActivity  {
         ButterKnife.bind(this);
 
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(layoutToolbar);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 

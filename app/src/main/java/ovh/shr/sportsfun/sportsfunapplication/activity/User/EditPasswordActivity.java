@@ -69,7 +69,7 @@ public class EditPasswordActivity extends AppCompatActivity {
     @BindView(R.id.txtPassword) EditText txtNewPassword;
     @BindView(R.id.txtConfirmPassword) EditText txtConfirmPassword;
 
-    @BindView(R.id.my_toolbar) Toolbar toolbar;
+    @BindView(R.id.layoutToolbar) Toolbar layoutToolbar;
     private ActionBar actionBar;
     private ProgressDialog progressDialog;
 
@@ -82,7 +82,7 @@ public class EditPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_password);
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(layoutToolbar);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 

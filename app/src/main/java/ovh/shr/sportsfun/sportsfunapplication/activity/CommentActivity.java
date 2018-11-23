@@ -49,7 +49,7 @@ public class CommentActivity extends AppCompatActivity {
 
     private ActionBar actionBar;
     private ProgressDialog progressDialog;
-    @BindView(R.id.my_toolbar) Toolbar toolbar;
+    @BindView(R.id.layoutToolbar) Toolbar layoutToolbar;
     @BindView(R.id.comments_list) ListView comments_list;
     @BindView(R.id.btnSendMessage) ImageButton btnSendMessage;
     @BindView(R.id.txtMessage) EditText txtMessage;
@@ -63,7 +63,7 @@ public class CommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comment);
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(layoutToolbar);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 

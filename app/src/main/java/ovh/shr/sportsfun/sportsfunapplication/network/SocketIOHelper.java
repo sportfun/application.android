@@ -1,9 +1,11 @@
 package ovh.shr.sportsfun.sportsfunapplication.network;
 
+import android.content.Context;
 import android.media.SoundPool;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONObject;
 
@@ -13,6 +15,8 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import ovh.shr.sportsfun.sportsfunapplication.SportsFunApplication;
+import ovh.shr.sportsfun.sportsfunapplication.activity.MessageActivity;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.NotificationHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
 
 public class SocketIOHelper
@@ -24,6 +28,9 @@ public class SocketIOHelper
     private static Boolean isConnected = false;
     private static String url = "http://api.sportsfun.shr.ovh:8080/";
     private static Emitter onConversationReceive;
+    private static Context context;
+
+    public static MessageActivity messageActivity;
 
     //endregion Declarations
 
@@ -35,6 +42,14 @@ public class SocketIOHelper
 
     public static void setSocket(Socket _socket) {
         _socket = _socket;
+    }
+
+    public static Context getContext() {
+        return context;
+    }
+
+    public static void setContext(Context context) {
+        SocketIOHelper.context = context;
     }
 
     //endregion Getters & Setters
@@ -52,6 +67,7 @@ public class SocketIOHelper
             _socket.on(Socket.EVENT_DISCONNECT, onDisconnect);
             _socket.on("message", onMessageReceived);
             _socket.on("info", onInfoReceived);
+            _socket.on("registerMessages", OnRegisterMessages);
 
             _socket.connect();
         } catch (URISyntaxException e) {
@@ -86,14 +102,22 @@ public class SocketIOHelper
             System.out.println("********** onConnect **********");
             isConnected = true;
 
-            JSONObject jsonObject = new JSONObject();
             try {
+                JSONObject jsonObject = new JSONObject();
                 jsonObject.put("token", SportsFunApplication.getAuthentificationToken());
                 _socket.emit("registerMessages", jsonObject);
             } catch (Exception error) {
 
             }
 
+        }
+    };
+
+    private static Emitter.Listener OnRegisterMessages = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            System.out.println("********** OnRegisterMessages **********");
+            System.out.println(args[0]);
         }
     };
 
@@ -130,6 +154,34 @@ public class SocketIOHelper
         @Override
         public void call(Object... args) {
 
+            System.out.println("********** onMessageReceived **********");
+
+            try {
+
+                JSONObject jsonObject = (JSONObject) args[0];
+                System.out.println(jsonObject.toString());
+                JsonParser parser = new JsonParser();
+                JsonObject json = (JsonObject) parser.parse(jsonObject.toString());
+                JsonObject author = json.get("author").getAsJsonObject();
+                if (messageActivity != null) {
+                    if (messageActivity.getPartnerID().equals(author.get("_id").getAsString())) {
+                        messageActivity.onMessageReceived.onTaskCompleted(json);
+                        return;
+                    }
+                }
+
+
+
+
+                JsonObject notification = new JsonObject();
+                notification.addProperty("partnerName", author.get("firstName").getAsString() + " " + author.get("lastName").getAsString());
+                notification.addProperty("partnerID", author.get("_id").getAsString());
+                notification.addProperty("message", json.get("content").getAsString());
+                NotificationHelper.newNotification(getContext(), notification);
+
+            } catch (Exception error) {
+
+            }
         }
     };
 
