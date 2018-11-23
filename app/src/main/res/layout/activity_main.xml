@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:itemBackground="@color/primaryColor"
-        app:itemIconTint="@color/white"
+        app:itemIconTint="@drawable/custom_color"
         app:itemTextColor="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
 
