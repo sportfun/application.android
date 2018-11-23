@@ -5,19 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
-    >
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-
-        android:layout_marginLeft="@dimen/feed_item_margin"
-        android:layout_marginRight="@dimen/feed_item_margin"
-        android:layout_marginTop="@dimen/feed_item_margin"
-        android:background="@drawable/bg_parent_rounded_corner"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/feed_item_padding_top_bottom">
+    android:layout_marginLeft="@dimen/feed_item_margin"
+    android:layout_marginRight="@dimen/feed_item_margin"
+    android:layout_marginTop="@dimen/feed_item_margin"
+    android:background="@drawable/bg_parent_rounded_corner"
+    android:paddingTop="@dimen/feed_item_margin">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -36,7 +28,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/feed_item_profile_info_pad">
+                android:paddingStart="@dimen/feed_item_profile_info_pad"
+                android:paddingEnd="@dimen/feed_item_profile_info_pad">
 
                 <TextView
                     android:id="@+id/txtName"
@@ -71,37 +64,42 @@
             tools:text="me.zqPostremo ad id indignitatis est ventum, ut cum peregrini ob formidatam haut ita dudum alimentorum inopiam pellerentur ab urbe praecipites, sectatoribus disciplinarum liberalium inpendio paucis sine respiratione ulla extrusis, tenerentur minimarum adseclae veri, quique id simularunt ad tempus, et tria milia saltatricum ne interpellata quidem cum choris totidemque remanerent magistris." />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="bottom"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp"
-            >
+            android:paddingStart="@dimen/feed_item_status_pad_left_right"
+            android:paddingEnd="@dimen/feed_item_status_pad_left_right"
+            android:textColor="@color/button_primary"
 
-            <TextView
-                android:id="@+id/lblLikes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="5dp"
-                tools:text="0 personnes aiment ça"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            tools:text="0 personnes aiment ça" />
 
-                android:textColor="@color/trans_black" />
+        <TextView
+            android:id="@+id/lblComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="@dimen/feed_item_status_pad_left_right"
+            android:paddingEnd="@dimen/feed_item_status_pad_left_right"
+            android:textAlignment="textEnd"
+            android:textColor="@color/button_primary"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            tools:text="0 commentaires" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/lblComments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingRight="5dp"
-                tools:text="0 commentaires"
-                android:textAlignment="textEnd"
-                android:textColor="@color/trans_black" />
-        </LinearLayout>
-
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="1dp"
@@ -115,28 +113,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/ic_thumb_up_orange"
-                android:paddingLeft="30dp"
                 android:background="@drawable/feed_leftbutton"
+                android:drawableStart="@drawable/ic_baseline_thumb_up_24px"
+                android:drawablePadding="8dp"
                 android:minHeight="48dp"
-                android:textColor="@color/primaryColor"
+                android:paddingStart="60dp"
+                android:paddingEnd="60dp"
+                android:text="@string/btnLike"
                 android:textAlignment="textStart"
-                android:text="   J'aime" />
+                android:textAllCaps="true"
+                android:textColor="@color/primaryColor" />
 
             <Button
                 android:id="@+id/btnComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/ic_message_orange"
-                android:paddingLeft="50dp"
                 android:background="@drawable/feed_rightbutton"
+                android:drawableStart="@drawable/ic_baseline_comment_24px"
+                android:drawablePadding="8dp"
                 android:minHeight="48dp"
-                android:textColor="@color/primaryColor"
+                android:paddingStart="35dp"
+                android:paddingEnd="35dp"
+                android:text="@string/btnComment"
                 android:textAlignment="textStart"
-                android:text="   Commenter" />
-        </LinearLayout>
+                android:textColor="@color/primaryColor" />
 
-    </LinearLayout>
+        </LinearLayout>
 
 </LinearLayout>
