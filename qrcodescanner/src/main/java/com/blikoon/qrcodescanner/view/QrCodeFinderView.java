@@ -100,7 +100,7 @@ public final class QrCodeFinderView extends RelativeLayout {
 
         drawFocusRect(canvas, frame);
         drawAngle(canvas, frame);
-        drawText(canvas, frame);
+        //drawText(canvas, frame);
         drawLaser(canvas, frame);
 
         // Request another update at the animation interval, but only repaint the laser line,

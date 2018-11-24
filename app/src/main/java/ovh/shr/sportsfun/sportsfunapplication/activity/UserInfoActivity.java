@@ -29,6 +29,7 @@ import okhttp3.Call;
 import okhttp3.Response;
 import ovh.shr.sportsfun.sportsfunapplication.R;
 import ovh.shr.sportsfun.sportsfunapplication.SportsFunApplication;
+import ovh.shr.sportsfun.sportsfunapplication.activity.User.EditGravatarActivity;
 import ovh.shr.sportsfun.sportsfunapplication.models.User;
 import ovh.shr.sportsfun.sportsfunapplication.network.API;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
@@ -36,6 +37,7 @@ import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.DrawableHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.NotificationHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 
 public class UserInfoActivity extends AppCompatActivity {
 
@@ -69,6 +71,13 @@ public class UserInfoActivity extends AppCompatActivity {
         _id = bundle.getString("_id");
         if (_id.equals(SportsFunApplication.getCurrentUser().getId()))
             isLocalUser = true;
+
+        LoadView();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
         LoadView();
     }
 
@@ -76,8 +85,6 @@ public class UserInfoActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
-
-
 
     //region Private methods
 
@@ -117,95 +124,54 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     private void RefreshLayout() {
-        txtFullname.setText(userDatas.getFullName());
-        txtBiographie.setText(userDatas.getBio());
-        Picasso.with(getApplicationContext())
-                .load(userDatas.getProfilPicUrl())
-                .resize(150,150)
-                .centerCrop()
-                .placeholder(R.drawable.baseline_account_circle_black_36)
-                .error(R.drawable.baseline_account_circle_black_36)
-                .into(avatar);
-
-        if (SportsFunApplication.getCurrentUser().getLinks().contains(_id)) {
-            btnFollow.setText(R.string.btnUnfollow);
-        } else {
-            btnFollow.setText(R.string.btnFollow);
-        }
-
-        if (isLocalUser == true) {
-            btnFollow.setVisibility(View.INVISIBLE);
-            btnSendMessage.setVisibility(View.INVISIBLE);
-        }
-        else
-        {
-            btnFollow.setVisibility(View.VISIBLE);
-            btnSendMessage.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void LoadDatas()
-    {
-        String endpoint = "api/user";
-
-        if (isLocalUser == false) {
-            endpoint += "/" + _id;
-        }
-        else
-        {
-            btnFollow.setVisibility(View.INVISIBLE);
-            btnSendMessage.setVisibility(View.INVISIBLE);
-        }
-
-        if (SportsFunApplication.getCurrentUser().getLinks().contains(_id)) {
-            btnFollow.setText(R.string.btnUnfollow);
-        } else {
-            btnFollow.setText(R.string.btnFollow);
-        }
-
-        NetworkManager.PostRequest(endpoint, null, RequestType.GET, new  okhttp3.Callback() {
-
+        runOnUiThread(new Runnable() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+            public void run() {
+                txtFullname.setText(userDatas.getFullName());
+                txtBiographie.setText(userDatas.getBio());
+                String gravatar = Utils.Gravatar(userDatas.getProfilePic(), 500);
+                Picasso.with(getApplicationContext())
+                        .load(gravatar)
+                        .placeholder(R.drawable.baseline_account_circle_black_36)
+                        .error(R.drawable.baseline_account_circle_black_36)
+                        .into(avatar);
 
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                if (response.isSuccessful()) {
-                    System.out.println(response.isSuccessful());
-
-                    Gson gson = new GsonBuilder().create();
-                    JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
-
-                    userDatas = gson.fromJson(json.get("data").getAsJsonObject(), User.class);
-                    userDatas.setProfilPicUrl(userDatas.getProfilPicUrl());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            txtFullname.setText(userDatas.getFullName());
-                            txtBiographie.setText(userDatas.getBio());
-                            Picasso.with(getApplicationContext())
-                                    .load(userDatas.getProfilPicUrl())
-                                    .resize(150,150)
-                                    .centerCrop()
-                                    .placeholder(R.drawable.baseline_account_circle_black_36)
-                                    .error(R.drawable.baseline_account_circle_black_36)
-                                    .into(avatar);
-
-                        }
-                    });
+                if (SportsFunApplication.getCurrentUser().getLinks().contains(_id)) {
+                    btnFollow.setText(R.string.btnUnfollow);
+                } else {
+                    btnFollow.setText(R.string.btnFollow);
                 }
 
+                if (isLocalUser == true) {
+                    btnFollow.setVisibility(View.INVISIBLE);
+                    btnSendMessage.setVisibility(View.INVISIBLE);
+                }
+                else
+                {
+                    btnFollow.setVisibility(View.VISIBLE);
+                    btnSendMessage.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    private void RemoveAvatar() {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("profilePic", "/static/user_default.jpg");
+
+        API.UpdateUser(null, jsonObject, new SCallback() {
+
+            @Override
+            public void onTaskCompleted(JsonObject result) {
+                SportsFunApplication.getCurrentUser().setProfilePic("/static/user_default.jpg");
+                RefreshLayout();
             }
 
         });
     }
 
     //endregion Private methods
-
 
     //region Events
 
@@ -222,14 +188,11 @@ public class UserInfoActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.selectImage:
-
-                NotificationHelper.newNotification2(getApplicationContext(), "Sylvain Garant", "Salut");
-
+                EditGravatarActivity.actionStart(getApplicationContext());
                 return true;
 
             case R.id.deleteImage:
-                System.out.println("deleteImage");
-
+                RemoveAvatar();
                 return true;
             default:
                 return super.onContextItemSelected(item);

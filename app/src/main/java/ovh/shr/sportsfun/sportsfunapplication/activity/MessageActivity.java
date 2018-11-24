@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,6 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.socket.emitter.Emitter;
 import ovh.shr.sportsfun.sportsfunapplication.R;
+import ovh.shr.sportsfun.sportsfunapplication.SportsFunApplication;
 import ovh.shr.sportsfun.sportsfunapplication.adapters.MessageListAdapter;
 import ovh.shr.sportsfun.sportsfunapplication.models.Message;
 import ovh.shr.sportsfun.sportsfunapplication.models.User;
@@ -37,6 +40,7 @@ import ovh.shr.sportsfun.sportsfunapplication.network.SocketIOHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.DateHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.NotificationHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -90,7 +94,6 @@ public class MessageActivity extends AppCompatActivity {
 
         this.messageListAdapter = new MessageListAdapter(this.getApplicationContext(), dataList);
         this.lvMessages.setAdapter(this.messageListAdapter);
-
         this.refresher.setOnRefreshListener(onRefreshListener);
 
         SocketIOHelper.messageActivity = this;
@@ -105,6 +108,7 @@ public class MessageActivity extends AppCompatActivity {
         } catch (Exception error) {
 
         }
+
     }
 
     @Override
@@ -125,158 +129,169 @@ public class MessageActivity extends AppCompatActivity {
 
     //endregion Menu
 
-    //region Private methods
+    //region Buttons
 
-    private void loadMore() {
-        System.out.println("LOADING MOOORE");
-        SocketIOHelper.openChannel("conversation", onConversationReceived2);
+    @OnClick(R.id.btnSendMessage)
+    public void OnSendMessageClick()
+    {
+       if (SocketIOHelper.isConnected()) {
 
-        try {
+           try {
 
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", partnerID);
-            jsonObject.put("last", DateHelper.toString(dataList.get(0).getCreationDate()));
-            SocketIOHelper.emit("conversation", jsonObject);
+               JSONObject jsonObject = new JSONObject();
+               jsonObject.put("to", partnerID);
+               jsonObject.put("content", txtMessage.getText());
+               SocketIOHelper.emit("message", jsonObject);
 
-        } catch (Exception error) {
+               JsonObject messageAuthor = new JsonObject();
+               messageAuthor.addProperty("_id", SportsFunApplication.getCurrentUser().getId());
 
-        }
+               JsonObject message = new JsonObject();
+               message.addProperty("content", txtMessage.getText().toString());
+               message.add("author", messageAuthor);
+               message.addProperty("createdAt", DateHelper.now());
 
+               System.out.print(message.toString());
+
+               insertMessage(message, true);
+
+               txtMessage.setText("");
+
+           } catch (Exception error) {
+               Utils.ToastMessage(this, "Impossible d'envoyer le message, veuillez réessayer plus tard");
+               error.printStackTrace();
+           }
+
+       } else {
+           Utils.ToastMessage(this, "Impossible d'envoyer le message, veuillez réessayer plus tard");
+       }
     }
 
-    private void addMessage(JsonObject jsonObject) {
+    //endregion Buttons
+
+    //region Events
+
+    private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            System.out.println("******* MessageActivity: onRefreshListener");
+            loadMore();
+        }
+    };
+
+
+    private Emitter.Listener onConversationReceived = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            System.out.println("******* MessageActivity: onConversationReceived");
+            JsonParser parser = new JsonParser();
+            JsonObject jsonObject = (JsonObject) parser.parse(args[0].toString());
+
+            for (JsonElement jsonElement : jsonObject.get("messages").getAsJsonArray()) {
+                insertMessage(jsonElement.getAsJsonObject(), false);
+            }
+
+            sortDatas();
+
+            SocketIOHelper.closeChannel("conversation", onConversationReceived);
+        }
+    };
+
+    private Emitter.Listener onLoadMoreConversationReceveid = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            System.out.println("******* MessageActivity: onLoadMoreConversationReceveid");
+            System.out.println(args[0]);
+            JsonParser parser = new JsonParser();
+            JsonObject jsonObject = (JsonObject) parser.parse(args[0].toString());
+
+            for (JsonElement jsonElement : jsonObject.get("messages").getAsJsonArray()) {
+                insertMessage(jsonElement.getAsJsonObject(), false);
+            }
+
+            sortDatas();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refresher.setRefreshing(false);
+                    messageListAdapter.notifyDataSetChanged();
+                }
+            });
+
+            SocketIOHelper.closeChannel("conversation", onLoadMoreConversationReceveid);
+        }
+    };
+
+    public SCallback onMessageReceived = new SCallback() {
+        @Override
+        public void onTaskCompleted(JsonObject result) {
+            System.out.println("******* MessageActivity: onMessageReceived");
+            System.out.println(result.toString());
+
+            insertMessage(result, true);
+
+
+        }
+    };
+
+
+
+
+    //endregion Events
+
+    //region Private methods
+
+    private void insertMessage(JsonObject jsonObject, boolean withRefresh) {
 
         Message newMessage = new Message();
+
         newMessage.setMessage(jsonObject.get("content").getAsString());
         newMessage.setAuthor(jsonObject.get("author").getAsJsonObject().get("_id").getAsString());
         newMessage.setCreationDate(DateHelper.fromISO8601UTC(jsonObject.get("createdAt").getAsString()));
         dataList.add(newMessage);
 
+        if (withRefresh)
+            notifyDataList(true);
+
     }
 
-    private void notifyDataList() {
+    private void sortDatas() {
+
+        dataList.sort(new Comparator<Message>() {
+            @Override
+            public int compare(Message message, Message t1) {
+                return message.getCreationDate().compareTo(t1.getCreationDate());
+            }
+        });
+
+        notifyDataList(true);
+    }
+
+    private void notifyDataList(final Boolean goLast) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 messageListAdapter.notifyDataSetChanged();
+                if (goLast)
+                    lvMessages.setSelection(messageListAdapter.getCount() - 1);
             }
         });
     }
-    
-    private Emitter.Listener onConversationReceived = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            JSONObject JSONObject = (JSONObject) args[0];
-            JsonParser jsonParser = new JsonParser();
-            JsonObject jsonObject = (JsonObject) jsonParser.parse(JSONObject.toString());
 
-            for (JsonElement msgObj : jsonObject.get("messages").getAsJsonArray()) {
-                addMessage(msgObj.getAsJsonObject());
-            }
-
-            dataList.sort(new Comparator<Message>() {
-                @Override
-                public int compare(Message message, Message t1) {
-                    return message.getCreationDate().compareTo(t1.getCreationDate());
-                }
-            });
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    messageListAdapter.notifyDataSetChanged();
-                    lvMessages.setSelection(messageListAdapter.getCount() - 1);
-                    txtMessage.setText("");
-
-                }
-            });
-
-            SocketIOHelper.closeChannel("conversation", onConversationReceived);
-
-
-        }
-    };
-
-    private Emitter.Listener onConversationReceived2 = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            JSONObject JSONObject = (JSONObject) args[0];
-            JsonParser jsonParser = new JsonParser();
-            JsonObject jsonObject = (JsonObject) jsonParser.parse(JSONObject.toString());
-            System.out.println("LOOL");
-            System.out.println(jsonObject);
-            for (JsonElement msgObj : jsonObject.get("messages").getAsJsonArray()) {
-                addMessage(msgObj.getAsJsonObject());
-            }
-
-            dataList.sort(new Comparator<Message>() {
-                @Override
-                public int compare(Message message, Message t1) {
-                    return message.getCreationDate().compareTo(t1.getCreationDate());
-                }
-            });
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    messageListAdapter.notifyDataSetChanged();
-                    lvMessages.setSelection(messageListAdapter.getCount() - 1);
-                    txtMessage.setText("");
-
-                }
-            });
-
-            SocketIOHelper.closeChannel("conversation", onConversationReceived2);
-
-
-        }
-    };
-
-    private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-            loadMore();
-        }
-    };
-
-    private void SendMessage()
-    {
+    private void loadMore() {
+        SocketIOHelper.openChannel("conversation", onLoadMoreConversationReceveid);
         try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("to", partnerID);
-            jsonObject.put("content", txtMessage.getText());
 
-            SocketIOHelper.emit("message", jsonObject);
-            txtMessage.setText("");
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", partnerID);
+            jsonObject.put("last", dataList.get(0).getCreationDate());
+            SocketIOHelper.emit("conversation", jsonObject);
 
         } catch (Exception error) {
-            error.printStackTrace();
+
         }
     }
-
     //endregion Private methods
-
-    //region Public methods
-
-    @OnClick(R.id.btnSendMessage)
-    public void OnSendMessageClick()
-    {
-        SendMessage();
-    }
-
-    //endregion Public mehtods
-
-    //region Events
-
-    public SCallback onMessageReceived = new SCallback() {
-        @Override
-        public void onTaskCompleted(JsonObject result) {
-            System.out.print("******* MessageActivity: onMessageReceived");
-            addMessage(result);
-            notifyDataList();
-        }
-    };
-
-    //endregion Events
 
 }

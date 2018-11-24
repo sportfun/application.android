@@ -221,8 +221,6 @@ public class API {
     }
 
     public static void Register(JsonObject jsonObject, final SCallback callback) {
-
-
         NetworkManager.PostRequest("api/user", jsonObject, RequestType.POST, new okhttp3.Callback() {
 
             @Override
@@ -261,8 +259,73 @@ public class API {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("qr", code);
 
-
         NetworkManager.PostRequest("api/qr", jsonObject, RequestType.PUT, new  okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+                JsonObject tmp = new JsonObject();
+                tmp.addProperty("success", false);
+                tmp.addProperty("message", "failed_to_connect");
+                callback.onTaskCompleted(tmp);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Gson gson = new GsonBuilder().create();
+                JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
+
+                if (response.isSuccessful()) {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                } else {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                }
+            }
+        });
+    }
+
+    public static void UpdateUser(String userID, final JsonObject jsonObject, final SCallback callback) {
+
+        NetworkManager.PostRequest("api/user" + (userID != null ? "/" + userID : ""), jsonObject, RequestType.PUT, new  okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+                JsonObject tmp = new JsonObject();
+                tmp.addProperty("success", false);
+                tmp.addProperty("message", "failed_to_connect");
+                callback.onTaskCompleted(tmp);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Gson gson = new GsonBuilder().create();
+                JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
+
+                if (response.isSuccessful()) {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                } else {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                }
+            }
+        });
+    }
+
+    public static void GetActivities(final SCallback callback) {
+
+        NetworkManager.PostRequest("api/activity", null, RequestType.GET, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -294,5 +357,45 @@ public class API {
         });
 
     }
+
+    public static void ResetPassword(String username, String email, final SCallback callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("username", username);
+        jsonObject.addProperty("email", email);
+
+        NetworkManager.PostRequest("api/user/password", jsonObject, RequestType.LOCK, new okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                JsonObject tmp = new JsonObject();
+                tmp.addProperty("success", false);
+                tmp.addProperty("message", "failed_to_connect");
+                callback.onTaskCompleted(tmp);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Gson gson = new GsonBuilder().create();
+                JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
+                System.out.println(json.toString());
+                if (response.isSuccessful()) {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                } else {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                }
+            }
+
+        });
+
+    }
+
 
 }

@@ -67,30 +67,17 @@ public class MessageListAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        final ViewHolder holder;
+        ViewHolder holder;
+        Message message = dataList.get(i);
 
-        if (view == null)
-        {
-            if (getItemViewType(i) == TYPE_IN) {
+        holder = new ViewHolder();
 
-                holder = new ViewHolder();
-                view = inflater.inflate(R.layout.msg_item_in, null);
-               // holder.avatar = (CircleImageView) view.findViewById(R.id.icon_in);
-                holder.text = (TextView) view.findViewById(R.id.text_in);
-
-            } else {
-
-                holder = new ViewHolder();
-                view = inflater.inflate(R.layout.msg_item_out, null);
-                //holder.avatar = (CircleImageView) view.findViewById(R.id.icon_out);
-                holder.text = (TextView) view.findViewById(R.id.text_out);
-
-            }
-
-            view.setTag(holder);
-
+        if (!message.getAuthor().equals(SportsFunApplication.getCurrentUser().getId())) {
+            view = inflater.inflate(R.layout.msg_item_in, null);
+            holder.text = (TextView) view.findViewById(R.id.text_in);
         } else {
-            holder = (ViewHolder) view.getTag();
+            view = inflater.inflate(R.layout.msg_item_out, null);
+            holder.text = (TextView) view.findViewById(R.id.text_out);
         }
 
         holder.text.setText(dataList.get(i).getMessage());

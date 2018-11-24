@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
-
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 /**
  * Created by king_j on 14/03/2018.
  */
@@ -145,11 +145,15 @@ public class User {
 
     public void setProfilPicUrl(String profilPicUrl) {
 
-        if (profilPicUrl.startsWith("http://"))
+        if (profilPicUrl.startsWith("http://") || profilPicUrl.startsWith("https://"))
             this.profilPicUrl = profilPicUrl;
         else
             this.profilPicUrl = NetworkManager.BASE_CDN + profilPicUrl;
 
+    }
+
+    public String getGravatarURL() {
+        return "https://www.gravatar.com/avatar/" + Utils.MD5Hex(this.profilePic);
     }
 
     public List<String> getLinks() {

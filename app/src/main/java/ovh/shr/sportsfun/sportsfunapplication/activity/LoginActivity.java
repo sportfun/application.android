@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setVisibility(View.VISIBLE);
 
-        String txtSports = Utils.getColoredSpanned("Sports", "#1A1A1A");
+        String txtSports = Utils.getColoredSpanned("Sports", "#2c3e50");
         String txtFun = Utils.getColoredSpanned("Fun","#EA973E");
         sportsfun.setText(Html.fromHtml(txtSports + txtFun, 0));
 

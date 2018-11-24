@@ -52,6 +52,10 @@ public class SocketIOHelper
         SocketIOHelper.context = context;
     }
 
+    public static Boolean isConnected() {
+        return isConnected;
+    }
+
     //endregion Getters & Setters
 
     //region Public methods

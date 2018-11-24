@@ -18,8 +18,9 @@
             android:backgroundTint="@color/white"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -43,7 +44,8 @@
                     android:paddingLeft="50dp"
                     android:paddingTop="5dp"
                     android:text="Jimmy King"
-                    android:textAppearance="?android:attr/textAppearanceButton" />
+                    android:textAppearance="?android:attr/textAppearanceButton"
+                    android:textColor="@color/primaryColor"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -64,8 +66,8 @@
             android:backgroundTint="@color/white"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -87,7 +89,8 @@
                     android:paddingLeft="50dp"
                     android:paddingTop="5dp"
                     android:text="@string/txtIdentityLabel"
-                    android:textAppearance="?android:attr/textAppearanceButton" />
+                    android:textAppearance="?android:attr/textAppearanceButton"
+                    android:textColor="@color/primaryColor"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -108,8 +111,8 @@
             android:backgroundTint="@color/white"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -131,7 +134,8 @@
                     android:paddingLeft="50dp"
                     android:paddingTop="5dp"
                     android:text="@string/txtPasswordLabel"
-                    android:textAppearance="?android:attr/textAppearanceButton" />
+                    android:textAppearance="?android:attr/textAppearanceButton"
+                    android:textColor="@color/primaryColor"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -152,8 +156,8 @@
             android:backgroundTint="@color/white"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -175,7 +179,8 @@
                     android:paddingLeft="50dp"
                     android:paddingTop="5dp"
                     android:text="@string/txtBioLabel"
-                    android:textAppearance="?android:attr/textAppearanceButton" />
+                    android:textAppearance="?android:attr/textAppearanceButton"
+                    android:textColor="@color/primaryColor"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -196,8 +201,8 @@
             android:backgroundTint="@color/white"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -218,7 +223,8 @@
                     android:layout_centerVertical="true"
                     android:gravity="left"
                     android:paddingLeft="50dp"
-                    android:text="@string/txtLogoutDescription" />
+                    android:text="@string/txtLogoutDescription"
+                    android:textColor="@color/primaryColor"/>
 
             </RelativeLayout>
         </FrameLayout>

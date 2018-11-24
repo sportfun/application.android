@@ -36,6 +36,7 @@ import ovh.shr.sportsfun.sportsfunapplication.models.User;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.DateHelper;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 
 public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdapter.ViewHolder>{
 
@@ -97,11 +98,10 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
         viewHolder.txtContent.setText(dataList.get(location).getContent());
         viewHolder.txtTimestamp.setText(DateHelper.toString(dataList.get(location).getCreatedAt()));
 
-
+        String gravatar = Utils.Gravatar(dataList.get(location).getProfilPic(), 200);
+        System.out.println(gravatar);
         Picasso.with(getCurrentActivity().getApplicationContext())
-                .load(dataList.get(location).getProfilPic())
-                .resize(200,200).
-                centerCrop()
+                .load(gravatar)
                 .placeholder(R.drawable.baseline_account_circle_black_36)
                 .error(R.drawable.baseline_account_circle_black_36)
                 .into(viewHolder.profilPic);

@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -27,6 +28,8 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 
 import com.google.zxing.Result;
 import com.blikoon.qrcodescanner.camera.CameraManager;
@@ -43,7 +46,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 
-public class QrCodeActivity extends Activity implements Callback, OnClickListener {
+public class QrCodeActivity extends AppCompatActivity  implements Callback, OnClickListener {
 
     private static final int REQUEST_SYSTEM_PICTURE = 0;
     private static final int REQUEST_PICTURE = 1;
@@ -68,6 +71,7 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
     private TextView mTvFlashLightText;
     private Executor mQrCodeExecutor;
     private Handler mHandler;
+    private Toolbar layoutToolbar;
 
     private final String GOT_RESULT = "com.blikoon.qrcodescanner.got_qr_scan_relult";
     private final String ERROR_DECODING_IMAGE = "com.blikoon.qrcodescanner.error_decoding_image";
@@ -94,6 +98,9 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
         initData();
         mApplicationContext = getApplicationContext();
 
+
+
+
     }
 
     private void checkPermission() {
@@ -113,15 +120,13 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
     }
 
     private void initView() {
-        TextView tvPic = (TextView) findViewById(R.id.qr_code_header_black_pic);
+        layoutToolbar = findViewById(R.id.layoutToolbar);
         mIvFlashLight = (ImageView) findViewById(R.id.qr_code_iv_flash_light);
-        mTvFlashLightText = (TextView) findViewById(R.id.qr_code_tv_flash_light);
         mQrCodeFinderView = (QrCodeFinderView) findViewById(R.id.qr_code_view_finder);
         mSurfaceView = (SurfaceView) findViewById(R.id.qr_code_preview_view);
         mLlFlashLight = findViewById(R.id.qr_code_ll_flash_light);
         mHasSurface = false;
         mIvFlashLight.setOnClickListener(this);
-        tvPic.setOnClickListener(this);
     }
 
     private void initData() {
@@ -129,12 +134,27 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
         mInactivityTimer = new InactivityTimer(QrCodeActivity.this);
         mQrCodeExecutor = Executors.newSingleThreadExecutor();
         mHandler = new WeakHandler(this);
+
+        setSupportActionBar(layoutToolbar);
+        getSupportActionBar().setTitle("Connexion rapide");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     private boolean hasCameraPermission() {
         PackageManager pm = getPackageManager();
         return PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.CAMERA", getPackageName());
     }
+
+    //region Menu
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
+
+    //endregion Menu
 
     @Override
     protected void onResume() {
@@ -279,10 +299,6 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
         if (mPlayBeep && mMediaPlayer != null) {
             mMediaPlayer.start();
         }
-        if (mVibrate) {
-            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-            vibrator.vibrate(VIBRATE_DURATION);
-        }
     }
 
     /**
@@ -304,14 +320,6 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
                     turnFlashLightOff();
                 }
 
-        }else if(v.getId() == R.id.qr_code_header_black_pic)
-        {
-            if (!hasCameraPermission()) {
-                    mDecodeManager.showPermissionDeniedDialog(this);
-                } else {
-                    openSystemAlbum();
-                }
-
         }
 
     }
@@ -325,14 +333,12 @@ public class QrCodeActivity extends Activity implements Callback, OnClickListene
 
     private void turnFlashlightOn() {
         mNeedFlashLightOpen = false;
-        mTvFlashLightText.setText(getString(R.string.qr_code_close_flash_light));
         mIvFlashLight.setBackgroundResource(R.drawable.flashlight_turn_off);
         CameraManager.get().setFlashLight(true);
     }
 
     private void turnFlashLightOff() {
         mNeedFlashLightOpen = true;
-        mTvFlashLightText.setText(getString(R.string.qr_code_open_flash_light));
         mIvFlashLight.setBackgroundResource(R.drawable.flashlight_turn_on);
         CameraManager.get().setFlashLight(false);
     }

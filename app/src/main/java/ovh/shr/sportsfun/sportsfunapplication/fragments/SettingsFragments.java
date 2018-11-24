@@ -31,6 +31,7 @@ import ovh.shr.sportsfun.sportsfunapplication.activity.User.EditUserDataActivty;
 import ovh.shr.sportsfun.sportsfunapplication.activity.UserInfoActivity;
 import ovh.shr.sportsfun.sportsfunapplication.models.User;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 
 
 public class SettingsFragments extends Fragment {
@@ -158,10 +159,9 @@ public class SettingsFragments extends Fragment {
     public void onStart() {
         super.onStart();
 
+        String gravatar = Utils.Gravatar(SportsFunApplication.getCurrentUser().getProfilePic(), 500);
         Picasso.with(getContext())
-                .load(NetworkManager.BASE_CDN + "" + SportsFunApplication.getCurrentUser().getProfilePic())
-                .resize(200,200).
-                centerCrop()
+                .load(gravatar)
                 .placeholder(R.drawable.baseline_account_circle_black_36)
                 .error(R.drawable.baseline_account_circle_black_36)
                 .into(avatar);

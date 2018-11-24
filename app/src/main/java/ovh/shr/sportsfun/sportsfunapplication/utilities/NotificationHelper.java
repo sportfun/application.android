@@ -49,7 +49,8 @@ public class NotificationHelper {
                 .setContentTitle(jsonObject.get("partnerName").getAsString())
                 .setContentText(jsonObject.get("message").getAsString())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(contentIntent);
+                .setContentIntent(contentIntent)
+                .setAutoCancel(true);
 
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         manager.notify(1, mBuilder.build());

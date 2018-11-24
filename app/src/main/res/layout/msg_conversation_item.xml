@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
 
         android:layout_marginLeft="@dimen/feed_item_margin"
         android:layout_marginRight="@dimen/feed_item_margin"
@@ -23,71 +23,79 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="@dimen/feed_item_padding_left_right"
-            android:paddingRight="@dimen/feed_item_padding_left_right">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profilePic"
                 android:layout_width="@dimen/feed_item_profile_pic"
                 android:layout_height="@dimen/feed_item_profile_pic"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="5dp" />
 
             <LinearLayout
+                android:id="@+id/layoutInfos"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/feed_item_profile_info_pad">
 
-                <TextView
-                    android:id="@+id/txtName"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/feed_item_profile_name"
-                    android:textStyle="bold"
-                    tools:text="Nom de l'utilisateur" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtName"
+                        android:layout_width="148dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/primaryColor"
+                        android:textSize="@dimen/feed_item_profile_name"
+                        android:textStyle="bold"
+                        tools:text="Nom de l'utilisateur" />
+
+                    <TextView
+                        android:id="@+id/txtTimestamp"
+                        android:layout_width="86dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/timestamp"
+                        android:textSize="@dimen/feed_item_timestamp"
+                        tools:text="02/04/2018 15:20" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/txtTimestamp"
+                    android:id="@+id/txtMessage"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/timestamp"
-                    android:textSize="@dimen/feed_item_timestamp"
-                    tools:text="02/04/2018 15:20" />
+                    android:layout_height="22dp"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/trans_black"
+                    tools:text="message" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtMessage"
-            android:layout_width="fill_parent"
-            android:layout_height="22dp"
-            android:paddingBottom="2dp"
-            android:paddingLeft="@dimen/feed_item_status_pad_left_right"
-            android:paddingRight="@dimen/feed_item_status_pad_left_right"
-            android:paddingTop="2dp"
-            android:textColor="@color/trans_black"
-            tools:text="me.zqPostremo ad id indignitatis est ventum, ut cum peregrini ob formidatam haut ita dudum alimentorum inopiam pellerentur ab urbe praecipites, sectatoribus disciplinarum liberalium inpendio paucis sine respiratione ulla extrusis, tenerentur minimarum adseclae veri, quique id simularunt ad tempus, et tria milia saltatricum ne interpellata quidem cum choris totidemque remanerent magistris." />
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:gravity="bottom"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp"
-            >
+            android:orientation="horizontal">
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="1dp"
-            android:layout_marginLeft="1dp"
             android:layout_marginBottom="1dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
             android:gravity="bottom"
             android:orientation="horizontal">
 

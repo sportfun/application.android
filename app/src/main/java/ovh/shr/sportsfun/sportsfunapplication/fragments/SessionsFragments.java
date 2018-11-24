@@ -10,27 +10,38 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import ovh.shr.sportsfun.sportsfunapplication.R;
 import ovh.shr.sportsfun.sportsfunapplication.SportsFunApplication;
 import ovh.shr.sportsfun.sportsfunapplication.activity.PublishActivity;
+import ovh.shr.sportsfun.sportsfunapplication.adapters.GameHistoryAdapter;
+import ovh.shr.sportsfun.sportsfunapplication.models.GameInfo;
+import ovh.shr.sportsfun.sportsfunapplication.network.API;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.JsonHelper;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 
 public class SessionsFragments extends Fragment {
 
@@ -43,6 +54,10 @@ public class SessionsFragments extends Fragment {
     @BindView(R.id.lblObjectifs) TextView lblObjectifs;
     @BindView(R.id.lblObjectPercent) TextView lblObjectPercent;
     @BindView(R.id.pbObjectif) ProgressBar pbObjectif;
+
+    @BindView(R.id.lvGameHistory) ListView lvGameHistory;
+    private GameHistoryAdapter gameHistoryAdapter;
+    private List<GameInfo> dataList = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -72,6 +87,10 @@ public class SessionsFragments extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sessions_fragments, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        gameHistoryAdapter = new GameHistoryAdapter(this.getContext(), this.dataList);
+        lvGameHistory.setAdapter(gameHistoryAdapter);
+
         return view;
     }
 
@@ -94,6 +113,13 @@ public class SessionsFragments extends Fragment {
         SetPercentage(0);
         SetObjectifs(SportsFunApplication.getCurrentUser().getGoal());
         RefreshStats();
+        RefreshHistory();
+
+//        Picasso.with(getContext())
+//                .load("http://sportsfun.shr.ovh/ressources/jeu1.jpg")
+//                .placeholder(R.drawable.baseline_account_circle_black_36)
+//                .error(R.drawable.baseline_account_circle_black_36)
+//                .into(civGamePicture);
     }
 
     //endregion Constructor
@@ -182,4 +208,41 @@ public class SessionsFragments extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+    private void RefreshHistory() {
+
+        API.GetActivities(new SCallback() {
+
+            @Override
+            public void onTaskCompleted(JsonObject result) {
+
+                for (JsonElement jsonElement : result.get("data").getAsJsonArray()) {
+
+                    JsonObject jsonObject = jsonElement.getAsJsonObject();
+                    GameInfo newGameInfo = new GameInfo();
+
+                    newGameInfo.setId(jsonObject.get("_id").getAsString());
+                    newGameInfo.setType(jsonObject.get("type").getAsString());
+                    newGameInfo.setTimeSpent(jsonObject.get("timeSpent").getAsInt());
+
+                    dataList.add(newGameInfo);
+                }
+
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        gameHistoryAdapter.notifyDataSetChanged();
+
+                    }
+                });
+
+            }
+
+        });
+
+    }
+
 }

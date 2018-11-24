@@ -222,11 +222,11 @@ public class MainActivity extends AppCompatActivity implements
     private void ChangeView(CharSequence title, Fragment fragment)
     {
 
-        String txtSports = Utils.getColoredSpanned(title.toString(), "#e67e22");
+        //String txtSports = Utils.getColoredSpanned(title.toString(), "#e67e22");
         //String txtFun = Utils.getColoredSpanned("Fun","#FFFFFF");
-        Spanned test = Html.fromHtml(txtSports, 0);
+        //Spanned test = Html.fromHtml(txtSports, 0);
 
-        getSupportActionBar().setTitle(test);
+        getSupportActionBar().setTitle(title);
 
         frameLayout.removeAllViews();
         manager = getFragmentManager();

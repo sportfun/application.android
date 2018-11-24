@@ -163,7 +163,7 @@ public class News {
 
         public void setProfilPicUrl(String profilPicUrl) {
 
-            if (profilPicUrl.startsWith("http://"))
+            if (profilPicUrl.startsWith("http://") || profilPicUrl.startsWith("https://"))
                 this.profilPicUrl = profilPicUrl;
             else
                 this.profilPicUrl = NetworkManager.BASE_CDN + profilPicUrl;

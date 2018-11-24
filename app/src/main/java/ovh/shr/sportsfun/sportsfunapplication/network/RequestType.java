@@ -9,6 +9,7 @@ public enum RequestType {
     POST,
     GET,
     PUT,
-    DELETE
+    DELETE,
+    LOCK
 
 }

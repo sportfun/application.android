@@ -135,7 +135,7 @@ public class Conversations {
 
         public void setProfilPic(String profilPic) {
 
-            if (profilPic.startsWith("http://"))
+            if (profilPic.startsWith("http://") || profilPic.startsWith("https://"))
                 this.profilPic = profilPic;
             else
                 this.profilPic = NetworkManager.BASE_CDN + profilPic;

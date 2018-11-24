@@ -76,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity implements  DatePickerDi
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
-        String txtSports = Utils.getColoredSpanned("Sports", "#1A1A1A");
+        String txtSports = Utils.getColoredSpanned("Sports", "#2c3e50");
         String txtFun = Utils.getColoredSpanned("Fun","#EA973E");
         sportsfun.setText(Html.fromHtml(txtSports + txtFun, 0));
 

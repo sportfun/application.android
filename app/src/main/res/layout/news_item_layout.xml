@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginLeft="@dimen/feed_item_margin"
-    android:layout_marginRight="@dimen/feed_item_margin"
-    android:layout_marginTop="@dimen/feed_item_margin"
+    android:layout_margin="10dp"
     android:background="@drawable/bg_parent_rounded_corner"
     android:paddingTop="@dimen/feed_item_margin">
 

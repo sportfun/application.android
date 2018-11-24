@@ -62,7 +62,9 @@
         <activity
             android:name=".activity.User.EditUserDataActivty"
             android:label="@string/activityUserData" />
-        <activity android:name=".activity.User.EditBioActivity" />
+        <activity
+            android:name=".activity.User.EditGravatarActivity" android:label="@string/activityGravatar"/>
+        <activity android:name=".activity.User.EditBioActivity" android:label="@string/activityObjetif" />
         <activity android:name=".activity.MessageActivity" />
         <activity android:name=".activity.ResetPassword"></activity>
     </application>

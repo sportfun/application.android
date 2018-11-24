@@ -4,7 +4,9 @@ package ovh.shr.sportsfun.sportsfunapplication.utilities;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DateHelper {
 
@@ -23,6 +25,18 @@ public class DateHelper {
     public static String toString(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return dateFormat.format(date);
+    }
+
+
+    public static String fromCalendar(final Calendar calendar) {
+        Date date = calendar.getTime();
+        String formatted = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                .format(date);
+        return formatted;
+    }
+
+    public static String now() {
+        return fromCalendar(GregorianCalendar.getInstance());
     }
 
 }

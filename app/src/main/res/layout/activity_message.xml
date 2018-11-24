@@ -11,14 +11,20 @@
     android:layout_height="match_parent"
     android:focusable="true" android:focusableInTouchMode="true">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/layout_toolbar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@+id/inputLayout">
 
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/layout_toolbar" />
+
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
@@ -34,20 +40,22 @@
                 android:layout_marginEnd="10dp"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="10.0sp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="1dp"/>
+                >
+
+
+            </ListView>
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
 
-        <include
-            android:id="@+id/inputLayout"
-            layout="@layout/input_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
-
     </LinearLayout>
+
+    <include
+        android:id="@+id/inputLayout"
+        layout="@layout/input_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
 

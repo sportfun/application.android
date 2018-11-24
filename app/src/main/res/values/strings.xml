@@ -67,6 +67,10 @@
 
     <string name="lblLikes">%d personnes aiment ça</string>
     <string name="lblComments">%d commentaires</string>
+
+    <string name="lblLike">%d personne aime ça</string>
+    <string name="lblComment">%d commentaire</string>
+
     <string name="title_activity_publish">Nouvelle publication</string>
     <string name="title_activity_comment">CommentActivity</string>
 
@@ -82,7 +86,7 @@
     <string name="txtPasswordDescription">Modifier mon mot de passe</string>
 
     <string name="txtBioLabel">Objectif et Biographie</string>
-    <string name="txtBioDescription">Modifier mon Objectif et ma Biographie</string>
+    <string name="txtBioDescription">Modifier mon objectif sportif et ma biographie</string>
 
     <string name="txtLogoutDescription">Déconnexion</string>
     <string name="title_activity_edit_password">Edit Password</string>
@@ -115,6 +119,10 @@
     <string name="lblNetworkError">Aucune connexion réseau detectée.</string>
     <string name="lblLinkReturn">Se connecter ? Cliquez ici</string>
     <string name="btnResetPassword">Réinitialiser mon mot de passe</string>
+    <string name="lblHintGravatar">Veuillez utiliser votre adresse email Gravatar pour récuperer votre image de profil</string>
+    <string name="activityGravatar">Image de profil</string>
+    <string name="activityObjetif">Objectif et biographie</string>
+    <string name="progressWaitPlease">Veuillez patienter...</string>
 
 
 </resources>

@@ -71,6 +71,12 @@ public class NetworkManager {
                 body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
                 requestBuilder.delete(body);
                 break;
+
+            case LOCK:
+                body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+                requestBuilder.method("LOCK", body);
+                break;
+
         }
 
         client.newCall(requestBuilder.build()).enqueue(callback);

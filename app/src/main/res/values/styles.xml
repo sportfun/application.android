@@ -24,9 +24,8 @@
 
 
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        <!-- android:textColorPrimary is the color of the title text in the Toolbar  -->
         <item name="android:colorPrimary">@color/primary</item>
-        <item name="actionMenuTextColor">@color/primary</item>
+        <item name="actionMenuTextColor">@color/white</item>
 
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
         <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>

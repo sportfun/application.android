@@ -36,6 +36,7 @@ import ovh.shr.sportsfun.sportsfunapplication.models.User;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.DateHelper;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
@@ -100,22 +101,29 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         viewHolder.txtName.setText(dataList.get(location).getFullName());
         viewHolder.txtMessage.setText(dataList.get(location).getMessage());
-        viewHolder.lblLikes.setText(String.format(currentActivity.getString(R.string.lblLikes), dataList.get(location).getLikes()));
-        viewHolder.lblComments.setText(String.format(currentActivity.getString(R.string.lblComments), dataList.get(location).getComments()));
+
+        if (dataList.get(location).getLikes() == 1)
+            viewHolder.lblLikes.setText(String.format(currentActivity.getString(R.string.lblLike), dataList.get(location).getLikes()));
+        else
+            viewHolder.lblLikes.setText(String.format(currentActivity.getString(R.string.lblLikes), dataList.get(location).getLikes()));
+
+        if (dataList.get(location).getComments() == 1)
+            viewHolder.lblComments.setText(String.format(currentActivity.getString(R.string.lblComment), dataList.get(location).getComments()));
+        else
+            viewHolder.lblComments.setText(String.format(currentActivity.getString(R.string.lblComments), dataList.get(location).getComments()));
+
         viewHolder.txtTimestamp.setText(DateHelper.toString(dataList.get(location).getCreationDate()));
         viewHolder.setNewsEntity(dataList.get(location));
         viewHolder.setActivity(this.currentActivity);
 
         System.out.println(dataList.get(location).getProfilPicUrl());
 
+        String gravatar = Utils.Gravatar(dataList.get(location).getProfilPicUrl(), 200);
         Picasso.with(getCurrentActivity().getApplicationContext())
-                .load(dataList.get(location).getProfilPicUrl())
-                .resize(200,200).
-                centerCrop()
+                .load(gravatar)
                 .placeholder(R.drawable.baseline_account_circle_black_36)
                 .error(R.drawable.baseline_account_circle_black_36)
                 .into(viewHolder.profilPic);
-
 
 
         if (dataList.get(location).getLikesIDs().contains(SportsFunApplication.getCurrentUser().getId())) {
