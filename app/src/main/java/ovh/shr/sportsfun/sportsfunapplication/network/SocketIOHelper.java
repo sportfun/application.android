@@ -79,6 +79,14 @@ public class SocketIOHelper
         }
     }
 
+    public static void Disconnect()
+    {
+        if (!isConnected)
+            return;
+
+        _socket.disconnect();
+    }
+
     public static void openChannel(String channel, Emitter.Listener emitter) {
         _socket.on(channel, emitter);
     }

@@ -27,6 +27,10 @@ public class DateHelper {
         return dateFormat.format(date);
     }
 
+    public static String toString2(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy");
+        return dateFormat.format(date);
+    }
 
     public static String fromCalendar(final Calendar calendar) {
         Date date = calendar.getTime();

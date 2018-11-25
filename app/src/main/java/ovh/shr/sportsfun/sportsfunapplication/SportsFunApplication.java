@@ -18,6 +18,7 @@ import okhttp3.Response;
 import ovh.shr.sportsfun.sportsfunapplication.models.User;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
+import ovh.shr.sportsfun.sportsfunapplication.network.SocketIOHelper;
 
 public class SportsFunApplication {
 
@@ -67,6 +68,7 @@ public class SportsFunApplication {
         SharedPreferences preferences = context.getSharedPreferences("userdetails", 0);
         preferences.edit().remove("username").commit();
         preferences.edit().remove("password").commit();
+        SocketIOHelper.Disconnect();
     }
 
 

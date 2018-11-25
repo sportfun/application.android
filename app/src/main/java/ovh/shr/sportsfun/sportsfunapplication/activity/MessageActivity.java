@@ -285,7 +285,7 @@ public class MessageActivity extends AppCompatActivity {
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", partnerID);
-            jsonObject.put("last", dataList.get(0).getCreationDate());
+            jsonObject.put("last", DateHelper.toString2(dataList.get(0).getCreationDate()));
             SocketIOHelper.emit("conversation", jsonObject);
 
         } catch (Exception error) {
