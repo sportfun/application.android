@@ -22,6 +22,11 @@ public class DateHelper {
         }
     }
 
+    public static String toCustomString(Date date, String pattern) {
+        DateFormat dateFormat = new SimpleDateFormat(pattern);
+        return dateFormat.format(date);
+    }
+
     public static String toString(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return dateFormat.format(date);

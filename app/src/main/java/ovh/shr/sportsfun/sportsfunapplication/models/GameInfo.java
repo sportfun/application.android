@@ -7,8 +7,10 @@ public class GameInfo {
     //region Declarations
 
     private String id;
+    private String game;
     private String type;
     private Date date;
+    private int score;
     private int timeSpent;
 
     //endregion Declarations
@@ -47,7 +49,22 @@ public class GameInfo {
         this.timeSpent = timeSpent;
     }
 
+    public String getGame() {
+        return game;
+    }
 
-    //endregion Getters && Setters
+    public void setGame(String game) {
+        this.game = game;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+//endregion Getters && Setters
 
 }

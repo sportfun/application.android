@@ -39,6 +39,7 @@ import ovh.shr.sportsfun.sportsfunapplication.models.GameInfo;
 import ovh.shr.sportsfun.sportsfunapplication.network.API;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.DateHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.JsonHelper;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.SCallback;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
@@ -158,6 +159,7 @@ public class SessionsFragments extends Fragment {
                 }
 
                 if (elements.size() > 0) {
+                    timeSpent /= 60;
                     SetMinutesEfforts(timeSpent);
                     SetObjectifs(SportsFunApplication.getCurrentUser().getGoal());
 
@@ -223,8 +225,11 @@ public class SessionsFragments extends Fragment {
                     GameInfo newGameInfo = new GameInfo();
 
                     newGameInfo.setId(jsonObject.get("_id").getAsString());
+                    newGameInfo.setGame(jsonObject.get("game").getAsString());
                     newGameInfo.setType(jsonObject.get("type").getAsString());
                     newGameInfo.setTimeSpent(jsonObject.get("timeSpent").getAsInt());
+                    newGameInfo.setDate(DateHelper.fromISO8601UTC(jsonObject.get("createdAt").getAsString()));
+                    newGameInfo.setScore(jsonObject.get("score").getAsInt());
 
                     dataList.add(newGameInfo);
                 }

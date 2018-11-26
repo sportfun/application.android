@@ -3,16 +3,16 @@
     android:shape="rectangle" >
 
     <!-- view background color -->
-    <solid android:color="#45c2de" >
+    <solid android:color="@color/primaryLightDarkerColor" >
     </solid>
 
     <!-- view border color and width -->
     <stroke
         android:width="@dimen/feed_item_border_width"
-        android:color="#45c2de" >
+        android:color="@color/primaryLightDarkerColor" >
     </stroke>
 
-    <!-- Here is the corner radius -->
+    <!-- Here is the corner radius #45c2de -->
     <corners android:radius="@dimen/feed_item_corner_radius" >
     </corners>
 

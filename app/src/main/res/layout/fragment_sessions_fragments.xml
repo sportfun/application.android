@@ -54,6 +54,7 @@
                         android:layout_marginTop="16dp"
                         android:gravity="center_vertical|center"
                         android:text="0"
+                        android:textColor="@color/secondaryColor"
                         android:textAlignment="center"
                         android:textSize="30sp"
                         tools:text="0" />
@@ -91,6 +92,7 @@
                         android:layout_marginTop="16dp"
                         android:gravity="center_vertical|center"
                         android:text="0"
+                        android:textColor="@color/secondaryColor"
                         android:textAlignment="center"
                         android:textSize="30sp"
                         tools:text="0" />
@@ -128,7 +130,8 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_parent_rounded_corner_blue2"
                     android:gravity="center_vertical|center"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@color/secondaryColor"/>
 
                 <ProgressBar
                     android:id="@+id/pbObjectif"
@@ -139,6 +142,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="70dp"
+                    android:progressTint="@color/secondaryColor"
                     android:max="100" />
 
             </RelativeLayout>
@@ -167,7 +171,9 @@
         <ListView
             android:id="@+id/lvGameHistory"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0sp"/>
 
     </LinearLayout>
 
