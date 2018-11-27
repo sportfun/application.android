@@ -219,30 +219,41 @@ public class SessionsFragments extends Fragment {
             @Override
             public void onTaskCompleted(JsonObject result) {
 
-                for (JsonElement jsonElement : result.get("data").getAsJsonArray()) {
+                if (result.has("success") && result.get("success").getAsBoolean() == false) {
+                    switch (result.get("message").getAsString()) {
 
-                    JsonObject jsonObject = jsonElement.getAsJsonObject();
-                    GameInfo newGameInfo = new GameInfo();
+                        case "failed_to_connect":
 
-                    newGameInfo.setId(jsonObject.get("_id").getAsString());
-                    newGameInfo.setGame(jsonObject.get("game").getAsString());
-                    newGameInfo.setType(jsonObject.get("type").getAsString());
-                    newGameInfo.setTimeSpent(jsonObject.get("timeSpent").getAsInt());
-                    newGameInfo.setDate(DateHelper.fromISO8601UTC(jsonObject.get("createdAt").getAsString()));
-                    newGameInfo.setScore(jsonObject.get("score").getAsInt());
+                            break;
 
-                    dataList.add(newGameInfo);
-                }
-
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        gameHistoryAdapter.notifyDataSetChanged();
 
                     }
-                });
+                } else {
+
+                    for (JsonElement jsonElement : result.get("data").getAsJsonArray()) {
+
+                        JsonObject jsonObject = jsonElement.getAsJsonObject();
+                        GameInfo newGameInfo = new GameInfo();
+
+                        newGameInfo.setId(jsonObject.get("_id").getAsString());
+                        newGameInfo.setGame(jsonObject.get("game").getAsString());
+                        newGameInfo.setType(jsonObject.get("type").getAsString());
+                        newGameInfo.setTimeSpent(jsonObject.get("timeSpent").getAsInt());
+                        newGameInfo.setDate(DateHelper.fromISO8601UTC(jsonObject.get("createdAt").getAsString()));
+                        newGameInfo.setScore(jsonObject.get("score").getAsInt());
+
+                        dataList.add(newGameInfo);
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            gameHistoryAdapter.notifyDataSetChanged();
+
+                        }
+                    });
+                }
 
             }
 

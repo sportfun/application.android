@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sportsfun Application</string>
+    <string name="app_name">SportsFun</string>
 
     <string name="lblUsername">Nom d\'utilisateur</string>
     <string name="lblPassword">Mot de passe</string>

@@ -51,22 +51,26 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PublishActivity"
-            android:label="@string/title_activity_publish" />
+            android:label="@string/title_activity_publish"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.CommentActivity"
             android:label="@string/activityComments"
-            android:theme="@style/SportsFunTheme" />
+            android:theme="@style/SportsFunTheme"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.User.EditPasswordActivity"
-            android:label="@string/activityPassword" />
+            android:label="@string/activityPassword"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.User.EditUserDataActivty"
-            android:label="@string/activityUserData" />
+            android:label="@string/activityUserData"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.User.EditGravatarActivity" android:label="@string/activityGravatar"/>
-        <activity android:name=".activity.User.EditBioActivity" android:label="@string/activityObjetif" />
-        <activity android:name=".activity.MessageActivity" />
-        <activity android:name=".activity.ResetPassword"></activity>
+            android:name=".activity.User.EditGravatarActivity" android:label="@string/activityGravatar" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.User.EditBioActivity" android:label="@string/activityObjetif" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MessageActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ResetPassword" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

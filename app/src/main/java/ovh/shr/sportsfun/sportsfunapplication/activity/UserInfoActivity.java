@@ -164,8 +164,12 @@ public class UserInfoActivity extends AppCompatActivity {
 
             @Override
             public void onTaskCompleted(JsonObject result) {
-                SportsFunApplication.getCurrentUser().setProfilePic("/static/user_default.jpg");
-                RefreshLayout();
+                API.RefreshLocalUserData(new SCallback() {
+                    @Override
+                    public void onTaskCompleted(JsonObject result) {
+                        LoadView();
+                    }
+                });
             }
 
         });
@@ -177,6 +181,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (isLocalUser == false)
+            return;
         super.onCreateContextMenu(menu, v, menuInfo);
         if (v.getId() == R.id.avatar) {
             getMenuInflater().inflate(R.menu.menu_context_pic, menu);
@@ -185,6 +191,9 @@ public class UserInfoActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+
+        if (isLocalUser == false)
+            return super.onContextItemSelected(item);
 
         switch (item.getItemId()) {
             case R.id.selectImage:
@@ -254,12 +263,12 @@ public class UserInfoActivity extends AppCompatActivity {
         LoadView();
     }
 
-    @OnClick(R.id.avatar)
+    @OnClick(R.id.avatar) @Optional
     public void avatar_OnClick() {
         System.out.println("LOL");
     }
 
-    @OnClick(R.id.userinfo_header)
+    @OnClick(R.id.userinfo_header) @Optional
     public void userinfo_OnClick() {
         System.out.println("MDR");
         try {

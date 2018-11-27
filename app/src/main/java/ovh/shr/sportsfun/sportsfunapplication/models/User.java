@@ -105,7 +105,10 @@ public class User {
     }
 
     public String getProfilePic() {
-        return profilePic;
+        if (profilePic.startsWith("http://") || profilePic.startsWith("https://"))
+            return this.profilePic;
+        else
+            return NetworkManager.BASE_CDN + this.profilePic;
     }
 
     public void setProfilePic(String profilePic) {
@@ -139,8 +142,12 @@ public class User {
         this.goal = goal;
     }
 
-    public String getProfilPicUrl() {
-        return profilPicUrl;
+    public String getProfilPicUrl()
+    {
+        if (profilPicUrl.startsWith("http://") || profilPicUrl.startsWith("https://"))
+           return this.profilPicUrl;
+        else
+            return NetworkManager.BASE_CDN + profilPicUrl;
     }
 
     public void setProfilPicUrl(String profilPicUrl) {

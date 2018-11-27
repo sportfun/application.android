@@ -159,6 +159,16 @@ public class SettingsFragments extends Fragment {
     public void onStart() {
         super.onStart();
 
+        reloadAvatar();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadAvatar();
+    }
+
+    private void reloadAvatar() {
         String gravatar = Utils.Gravatar(SportsFunApplication.getCurrentUser().getProfilePic(), 500);
         Picasso.with(getContext())
                 .load(gravatar)
@@ -167,6 +177,5 @@ public class SettingsFragments extends Fragment {
                 .into(avatar);
 
         lblFullname.setText(SportsFunApplication.getCurrentUser().getFullName());
-
     }
 }
