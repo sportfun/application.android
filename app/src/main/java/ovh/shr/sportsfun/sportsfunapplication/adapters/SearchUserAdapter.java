@@ -14,6 +14,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import ovh.shr.sportsfun.sportsfunapplication.R;
 import ovh.shr.sportsfun.sportsfunapplication.models.User;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 
 
 public class SearchUserAdapter  extends BaseAdapter {
@@ -79,10 +80,10 @@ public class SearchUserAdapter  extends BaseAdapter {
 
         holder.nickname.setText(dataList.get(i).getFullName());
 
+
+        String gravatar = Utils.Gravatar(dataList.get(i).getProfilePic(), 500);
         Picasso.with(currentActivity.getApplicationContext())
-                .load(dataList.get(i).getProfilPicUrl())
-                .resize(200,200).
-                centerCrop()
+                .load(gravatar)
                 .placeholder(R.drawable.baseline_account_circle_black_36)
                 .error(R.drawable.baseline_account_circle_black_36)
                 .into(holder.avatar);

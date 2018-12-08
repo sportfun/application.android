@@ -116,11 +116,6 @@ public class SessionsFragments extends Fragment {
         RefreshStats();
         RefreshHistory();
 
-//        Picasso.with(getContext())
-//                .load("http://sportsfun.shr.ovh/ressources/jeu1.jpg")
-//                .placeholder(R.drawable.baseline_account_circle_black_36)
-//                .error(R.drawable.baseline_account_circle_black_36)
-//                .into(civGamePicture);
     }
 
     //endregion Constructor
@@ -184,18 +179,20 @@ public class SessionsFragments extends Fragment {
     }
 
     private void SetPercentage(int percent) {
-
-        this.lblObjectPercent.setText(percent + "%");
-        this.pbObjectif.setProgress(percent);
-
+        if (lblObjectPercent != null) {
+            this.lblObjectPercent.setText(percent + "%");
+            this.pbObjectif.setProgress(percent);
+        }
     }
 
     private void SetMinutesEfforts(int minutes) {
-        this.lblMinEfforts.setText("" + minutes);
+        if (this.lblMinEfforts != null)
+            this.lblMinEfforts.setText("" + minutes);
     }
 
     private void SetObjectifs(int amounts) {
-        this.lblObjectifs.setText("" + amounts);
+        if (lblObjectifs != null)
+            this.lblObjectifs.setText("" + amounts);
     }
 
     //endregion Private methods
@@ -236,7 +233,13 @@ public class SessionsFragments extends Fragment {
                         GameInfo newGameInfo = new GameInfo();
 
                         newGameInfo.setId(jsonObject.get("_id").getAsString());
-                        newGameInfo.setGame(jsonObject.get("game").getAsString());
+
+                        String gameTitle = jsonObject.get("game").getAsString();
+                        if (gameTitle.equals("5bfa8d332fad8ff8da014430"))
+                            gameTitle = "Runner";
+                        else
+                            gameTitle = "Tour de piste";
+                        newGameInfo.setGame(gameTitle);
                         newGameInfo.setType(jsonObject.get("type").getAsString());
                         newGameInfo.setTimeSpent(jsonObject.get("timeSpent").getAsInt());
                         newGameInfo.setDate(DateHelper.fromISO8601UTC(jsonObject.get("createdAt").getAsString()));
@@ -244,15 +247,16 @@ public class SessionsFragments extends Fragment {
 
                         dataList.add(newGameInfo);
                     }
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                                gameHistoryAdapter.notifyDataSetChanged();
 
-                            gameHistoryAdapter.notifyDataSetChanged();
-
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
 
             }

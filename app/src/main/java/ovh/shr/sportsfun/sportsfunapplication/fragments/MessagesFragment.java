@@ -173,13 +173,15 @@ public class MessagesFragment extends Fragment {
             JsonObject jsonObject = (JsonObject) jsonParser.parse(JSONObject.toString());
             conversationsAdapter.addItem(jsonObject);
 
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    refresher.setRefreshing(false);
-                }
-            });
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (refresher != null)
+                            refresher.setRefreshing(false);
+                    }
+                });
+            }
         }
     };
 

@@ -106,36 +106,36 @@
             android:gravity="bottom"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnLike"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/feed_leftbutton"
-                android:drawableStart="@drawable/ic_baseline_thumb_up_24px"
-                android:drawablePadding="8dp"
-                android:minHeight="48dp"
-                android:paddingStart="60dp"
-                android:paddingEnd="60dp"
-                android:text="@string/btnLike"
-                android:textAlignment="textStart"
-                android:textAllCaps="true"
-                android:textColor="@color/primaryColor" />
+        <Button
+            android:id="@+id/btnLike"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/feed_leftbutton"
+            android:drawableStart="@drawable/ic_baseline_thumb_up_24px"
+            android:drawablePadding="8dp"
+            android:minHeight="48dp"
+            android:paddingStart="60dp"
+            android:paddingEnd="60dp"
+            android:text="@string/btnLike"
+            android:textAlignment="textStart"
+            android:textAllCaps="true"
+            android:textColor="@color/primaryColor" />
 
-            <Button
-                android:id="@+id/btnComment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/feed_rightbutton"
-                android:drawableStart="@drawable/ic_baseline_comment_24px"
-                android:drawablePadding="8dp"
-                android:minHeight="48dp"
-                android:paddingStart="35dp"
-                android:paddingEnd="35dp"
-                android:text="@string/btnComment"
-                android:textAlignment="textStart"
-                android:textColor="@color/primaryColor" />
+        <Button
+            android:id="@+id/btnComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/feed_rightbutton"
+            android:drawableStart="@drawable/ic_baseline_comment_24px"
+            android:drawablePadding="8dp"
+            android:minHeight="48dp"
+            android:paddingStart="35dp"
+            android:paddingEnd="35dp"
+            android:text="@string/btnComment"
+            android:textAlignment="textStart"
+            android:textColor="@color/primaryColor" />
 
         </LinearLayout>
 

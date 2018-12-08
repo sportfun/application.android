@@ -76,9 +76,16 @@ public class GameHistoryAdapter extends BaseAdapter {
 
         //holder.lblScore.setText(gameInfo.getScore());
 
-        Picasso.with(context)
-                .load(R.drawable.game_1)
-                .into(holder.civGamePicture);
+        if (gameInfo.getGame().equals("Runner")) {
+            Picasso.with(context)
+                    .load(R.drawable.game_1)
+                    .into(holder.civGamePicture);
+        } else
+        {
+            Picasso.with(context)
+                    .load(R.drawable.game_2)
+                    .into(holder.civGamePicture);
+        }
 
         return view;
     }
@@ -158,7 +165,6 @@ public class GameHistoryAdapter extends BaseAdapter {
 
             this.lblGameTitle = itemView.findViewById(R.id.lblGameTitle);
             this.civGamePicture = itemView.findViewById(R.id.civGamePicture);
-            this.lblType = itemView.findViewById(R.id.lblType);
             this.lblDate = itemView.findViewById(R.id.lblDate);
             this.lblTimeSpent = itemView.findViewById(R.id.lblTimeSpent);
             this.lblScore = itemView.findViewById(R.id.lblScore);

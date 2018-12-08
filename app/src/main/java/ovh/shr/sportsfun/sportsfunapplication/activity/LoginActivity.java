@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity
     public void lblLinkSignUp_OnClick()
     {
         Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivityForResult(intent, 0);
         finish();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity
     @OnClick(R.id.lblLinkResetPassword)
     public void lblLinkResetPassword_OnClick() {
         Intent intent = new Intent(getApplicationContext(), ResetPassword.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivityForResult(intent, 1);
         finish();
         overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);

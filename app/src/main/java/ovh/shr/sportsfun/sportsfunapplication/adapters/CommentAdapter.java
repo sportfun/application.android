@@ -30,6 +30,7 @@ import ovh.shr.sportsfun.sportsfunapplication.models.News;
 import ovh.shr.sportsfun.sportsfunapplication.network.NetworkManager;
 import ovh.shr.sportsfun.sportsfunapplication.network.RequestType;
 import ovh.shr.sportsfun.sportsfunapplication.utilities.DateHelper;
+import ovh.shr.sportsfun.sportsfunapplication.utilities.Utils;
 
 public class CommentAdapter extends BaseAdapter {
 
@@ -87,11 +88,11 @@ public class CommentAdapter extends BaseAdapter {
         if (view == null) {
 
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.comment_list_item, null);
-            holder.avatar = (CircleImageView) view.findViewById(R.id.avatar);
+            view = inflater.inflate(R.layout.layout_comment_item, null);
+            holder.avatar = (CircleImageView) view.findViewById(R.id.comment_icon);
             holder.content = (TextView) view.findViewById(R.id.comment_content);
-            holder.time = (TextView) view.findViewById(R.id.time);
-            holder.nickname = (TextView) view.findViewById(R.id.nickname);
+//            holder.time = (TextView) view.findViewById(R.id.time);
+            holder.nickname = (TextView) view.findViewById(R.id.comment_author);
             view.setTag(holder);
 
         } else {
@@ -100,12 +101,11 @@ public class CommentAdapter extends BaseAdapter {
 
         holder.nickname.setText(dataList.get(i).getFullName());
         holder.content.setText(dataList.get(i).getMessage());
-        holder.time.setText(DateHelper.toString(dataList.get(0).getCreationDate()));
+        //holder.time.setText(DateHelper.toString(dataList.get(0).getCreationDate()));
 
+        String gravatar = Utils.Gravatar(dataList.get(i).getProfilPicUrl(), 500);
         Picasso.with(currentActivity.getApplicationContext())
-                .load(dataList.get(i).getProfilPicUrl())
-                .resize(200,200).
-                centerCrop()
+                .load(gravatar)
                 .placeholder(R.drawable.baseline_account_circle_black_36)
                 .error(R.drawable.baseline_account_circle_black_36)
                 .into(holder.avatar);
@@ -134,14 +134,15 @@ public class CommentAdapter extends BaseAdapter {
 
                 for (int index = 0; index < elements.size(); index++) {
                     JsonObject obj = elements.get(index).getAsJsonObject();
+                    JsonObject author = obj.get("author").getAsJsonObject();
 
                     News.NewsEntity newsEntity = new News.NewsEntity();
                     newsEntity.setId(obj.get("_id").getAsString());
                     newsEntity.setCreationDate(DateHelper.fromISO8601UTC(obj.get("createdAt").getAsString()));
                     newsEntity.setMessage(obj.get("content").getAsString());
-                    newsEntity.setFirstname(obj.get("author").getAsJsonObject().get("firstName").getAsString());
-                    newsEntity.setLastname(obj.get("author").getAsJsonObject().get("lastName").getAsString());
-                    newsEntity.setProfilPicUrl(obj.get("author").getAsJsonObject().get("profilePic").getAsString());
+                    newsEntity.setFirstname(author.get("firstName").getAsString());
+                    newsEntity.setLastname(author.get("lastName").getAsString());
+                    newsEntity.setProfilPicUrl(author.get("profilePic").getAsString());
 
                     dataList.add(newsEntity);
                 }

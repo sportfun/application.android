@@ -59,12 +59,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/lblType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Type d'effort :" />
-
-                    <TextView
                         android:id="@+id/lblDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

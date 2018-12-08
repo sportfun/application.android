@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.text.Html;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,6 +54,7 @@ public class UserInfoActivity extends AppCompatActivity {
     @Nullable @BindView(R.id.btnFollow) AppCompatButton btnFollow;
     @Nullable @BindView(R.id.txtFullname) TextView txtFullname;
     @Nullable @BindView(R.id.txtBiographie) TextView txtBiographie;
+    @Nullable @BindView(R.id.sportsfun) TextView sportsfun;
 
     @Nullable @BindView(R.id.avatar) CircleImageView avatar;
     @Nullable @BindView(R.id.userinfo_header) LinearLayout userinfo_header;
@@ -127,6 +129,11 @@ public class UserInfoActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
+                String txtSports = Utils.getColoredSpanned("Sports", "#FFFFFF");
+                String txtFun = Utils.getColoredSpanned("Fun","#EA973E");
+                sportsfun.setText(Html.fromHtml(txtSports + txtFun, 0));
+
                 txtFullname.setText(userDatas.getFullName());
                 txtBiographie.setText(userDatas.getBio());
                 String gravatar = Utils.Gravatar(userDatas.getProfilePic(), 500);
