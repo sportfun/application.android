@@ -253,7 +253,6 @@ public class API {
 
     }
 
-
     public static void SendQRCode(final String code, final SCallback callback) {
 
         JsonObject jsonObject = new JsonObject();
@@ -289,6 +288,44 @@ public class API {
             }
         });
     }
+
+    public static void Join(final String code, final SCallback callback) {
+
+
+
+        NetworkManager.PostRequest("api/user/sub/" + code, null, RequestType.PUT, new  okhttp3.Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+                JsonObject tmp = new JsonObject();
+                tmp.addProperty("success", false);
+                tmp.addProperty("message", "failed_to_connect");
+                callback.onTaskCompleted(tmp);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Gson gson = new GsonBuilder().create();
+                System.out.println(response.body().toString());
+
+                JsonObject json = gson.fromJson(response.body().string(), JsonObject.class);
+
+                if (response.isSuccessful()) {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                } else {
+                    if (callback != null)
+                    {
+                        callback.onTaskCompleted(json);
+                    }
+                }
+            }
+        });
+    }
+
 
     public static void UpdateUser(String userID, final JsonObject jsonObject, final SCallback callback) {
 

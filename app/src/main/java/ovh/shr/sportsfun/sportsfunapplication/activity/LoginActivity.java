@@ -198,6 +198,7 @@ public class LoginActivity extends AppCompatActivity
                             break;
 
                         case "Access forbidden":
+                        case "Username/password combination doesn't match any user":
                         case "Missing key 'username' in body":
                         case "Missing key 'password' in body":
                             DisplayError(getText(R.string.lblErrorAuthMessage));

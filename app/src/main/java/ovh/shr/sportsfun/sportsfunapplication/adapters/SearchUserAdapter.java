@@ -69,17 +69,19 @@ public class SearchUserAdapter  extends BaseAdapter {
         if (view == null) {
 
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.layout_searchuser_item, null);
+            view = inflater.inflate(R.layout.layout_useritem, null);
             holder.avatar = (CircleImageView) view.findViewById(R.id.avatar);
-            holder.nickname = (TextView) view.findViewById(R.id.nickname);
+            holder.fullname = (TextView) view.findViewById(R.id.lblFullname);
+            holder.username = (TextView) view.findViewById(R.id.lblUsername);
+
             view.setTag(holder);
 
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.nickname.setText(dataList.get(i).getFullName());
-
+        holder.fullname.setText(dataList.get(i).getFullName());
+        holder.username.setText("@" + dataList.get(i).getUsername());
 
         String gravatar = Utils.Gravatar(dataList.get(i).getProfilePic(), 500);
         Picasso.with(currentActivity.getApplicationContext())
@@ -96,7 +98,9 @@ public class SearchUserAdapter  extends BaseAdapter {
 
     public final class ViewHolder {
         public CircleImageView avatar;
-        public TextView nickname;
+        public TextView fullname;
+        public TextView username;
+
     }
 
     //endregion ViewHolder

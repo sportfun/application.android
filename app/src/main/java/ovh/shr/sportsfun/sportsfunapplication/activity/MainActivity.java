@@ -336,6 +336,26 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
+            } else if (result.startsWith("sportsfun-join:")) {
+
+                final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                alertDialog.setTitle("QR Code");
+                alertDialog.setMessage("Veuillez patienter...");
+                alertDialog.show();
+
+                API.Join(result.replace("sportsfun-join:", ""), new SCallback() {
+
+                    @Override
+                    public void onTaskCompleted(JsonObject result) {
+
+                        System.out.println(result.toString());
+
+
+
+
+                    }
+                });
+
             } else {
                 AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
                 alertDialog.setTitle("QR Code");

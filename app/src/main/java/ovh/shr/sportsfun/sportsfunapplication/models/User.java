@@ -113,7 +113,6 @@ public class User {
 
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
-        this.setProfilPicUrl(this.profilePic);
     }
 
     public String getCoverPic() {
@@ -140,27 +139,6 @@ public class User {
 
     public void setGoal(int goal) {
         this.goal = goal;
-    }
-
-    public String getProfilPicUrl()
-    {
-        if (profilPicUrl.startsWith("http://") || profilPicUrl.startsWith("https://"))
-           return this.profilPicUrl;
-        else
-            return NetworkManager.BASE_CDN + profilPicUrl;
-    }
-
-    public void setProfilPicUrl(String profilPicUrl) {
-
-        if (profilPicUrl.startsWith("http://") || profilPicUrl.startsWith("https://"))
-            this.profilPicUrl = profilPicUrl;
-        else
-            this.profilPicUrl = NetworkManager.BASE_CDN + profilPicUrl;
-
-    }
-
-    public String getGravatarURL() {
-        return "https://www.gravatar.com/avatar/" + Utils.MD5Hex(this.profilePic);
     }
 
     public List<String> getLinks() {

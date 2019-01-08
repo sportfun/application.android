@@ -63,6 +63,8 @@ public class GameHistoryAdapter extends BaseAdapter {
         view = inflater.inflate(R.layout.layout_item_history, null);
         ViewHolder holder = new ViewHolder(view);
         GameInfo gameInfo = dataList.get(i);
+        gameInfo.setTimeSpent(580);
+        gameInfo.setScore(150);
         holder.lblGameTitle.setText(gameInfo.getGame());
         holder.lblDate.setText("le " + DateHelper.toCustomString(gameInfo.getDate(), "dd/MM/yyyy"));
         holder.lblScore.setText("" + gameInfo.getScore());

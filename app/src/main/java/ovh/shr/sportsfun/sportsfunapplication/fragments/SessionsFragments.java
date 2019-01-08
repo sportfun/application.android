@@ -138,7 +138,7 @@ public class SessionsFragments extends Fragment {
     //region Private methods
 
     private void RefreshStats() {
-
+        dataList.clear();
         NetworkManager.PostRequest("api/activity", null, RequestType.GET, new Callback() {
 
             @Override
@@ -235,7 +235,7 @@ public class SessionsFragments extends Fragment {
                         newGameInfo.setId(jsonObject.get("_id").getAsString());
 
                         String gameTitle = jsonObject.get("game").getAsString();
-                        if (gameTitle.equals("5bfa8d332fad8ff8da014430"))
+                        if (gameTitle.equals("5c012ca07023b143fcd24aab"))
                             gameTitle = "Runner";
                         else
                             gameTitle = "Tour de piste";
